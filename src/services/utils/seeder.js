@@ -42,8 +42,6 @@ function generateInsertStatementsNota(idClase) {
     }
 }
 
-generateInsertStatementsNota(1);
-
 /*  
 VIEW clase
 select concat(curso.nivel, curso.letra) as curso, asignatura.nombre, docente.nombres
