@@ -10,7 +10,7 @@ export function getDocente(req, res) {
 
 export async function getDocentes(req, res) {
     const docentes = await docenteServices.getDocentes();
-    res.send(docentes);
+    res.json(docentes);
 }
 
 export function updateDocente(req, res) {

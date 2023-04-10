@@ -11,7 +11,7 @@ export function getAlumno(req, res) {
 
 export async function getAlumnos(req, res) {
     const alumnos = await alumnoServices.getAlumnos();
-    res.send(alumnos);
+    res.json(alumnos);
 }
 
 export function updateAlumno(req, res) {
