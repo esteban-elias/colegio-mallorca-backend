@@ -137,15 +137,14 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`nota` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `numero` VARCHAR(45) NOT NULL,
-  `porcentaje` VARCHAR(45) NOT NULL,
-  `calificacion` VARCHAR(45) NOT NULL,
+  `numero` INT UNSIGNED NOT NULL,
+  `porcentaje` INT UNSIGNED NOT NULL,
+  `calificacion` DECIMAL(2,1) NOT NULL,
   `id_alumno` INT UNSIGNED NOT NULL,
   `id_clase` INT UNSIGNED NOT NULL,
   `semestre` INT NOT NULL CHECK (semestre IN (1, 2))
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
-  UNIQUE INDEX `numero_UNIQUE` (`numero` ASC) VISIBLE,
   INDEX `fk_nota_alumno1_idx` (`id_alumno` ASC) VISIBLE,
   INDEX `fk_nota_clase1_idx` (`id_clase` ASC) VISIBLE,
   CONSTRAINT `fk_nota_alumno1`
