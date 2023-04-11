@@ -4,7 +4,8 @@ import { createAlumno,
          getAlumno,
          getAlumnos,
          updateAlumno,
-         deleteAlumno
+         deleteAlumno,
+         loginAlumno
 } from "../controllers/alumno.controller.js";  // * as ???
 
 const alumnoRouter = Router();
@@ -18,5 +19,7 @@ alumnoRouter.get('/', getAlumnos);
 alumnoRouter.put('/:id', updateAlumno);
 
 alumnoRouter.delete('/:id', deleteAlumno);
+
+alumnoRouter.post('/login', loginAlumno);
 
 export default alumnoRouter;

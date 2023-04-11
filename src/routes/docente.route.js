@@ -4,7 +4,8 @@ import { createDocente,
             getDocente,
             getDocentes,
             updateDocente,
-            deleteDocente
+            deleteDocente,
+            loginDocente
 } from "../controllers/docente.controller.js";  // * as ???
 
 const docenteRouter = Router();
@@ -18,5 +19,7 @@ docenteRouter.get('/', getDocentes);
 docenteRouter.put('/:id', updateDocente);
 
 docenteRouter.delete('/:id', deleteDocente);
+
+docenteRouter.post('/login', loginDocente);
 
 export default docenteRouter;
