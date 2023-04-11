@@ -1,24 +1,22 @@
 import { Router } from "express";
-
 import { createDocente,
-            getDocente,
-            getDocentes,
-            updateDocente,
-            deleteDocente,
-            loginDocente
+         getDocente,
+         updateDocente,
+         deleteDocente,
+         loginDocente
 } from "../controllers/docente.controller.js";  // * as ???
+import { cookieJwtAuthDocente } from '../middlewares/cookieJwtAuth.js';
+
 
 const docenteRouter = Router();
 
 docenteRouter.post('/', createDocente);
 
-docenteRouter.get('/:id', getDocente);
+docenteRouter.get('/', cookieJwtAuthDocente, getDocente);
 
-docenteRouter.get('/', getDocentes);
+docenteRouter.put('/', updateDocente);
 
-docenteRouter.put('/:id', updateDocente);
-
-docenteRouter.delete('/:id', deleteDocente);
+docenteRouter.delete('/', deleteDocente);
 
 docenteRouter.post('/login', loginDocente);
 

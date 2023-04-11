@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-// import db from "./config/db.js"; ???
 import indexRouter from './routes/index.route.js';  // /index.js?
 
 const app = express();  
@@ -24,14 +23,3 @@ app.use((err, req, res, next) => {
 app.listen(app.get('port'), () => {
     console.log(`Server on port ${app.get('port')}`);
 });
-
-/*
-// connect to database ???
-db.connect()
-  .then(() => {
-    console.log("Connected to database");
-  })
-  .catch((err) => {
-    console.log("Error: ", err);
-  });
-*/

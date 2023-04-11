@@ -1,24 +1,21 @@
 import { Router } from "express";
-
 import { createAlumno,
          getAlumno,
-         getAlumnos,
          updateAlumno,
          deleteAlumno,
          loginAlumno
 } from "../controllers/alumno.controller.js";  // * as ???
+import { cookieJwtAuthAlumno } from '../middlewares/cookieJwtAuth.js';
 
 const alumnoRouter = Router();
 
 alumnoRouter.post('/', createAlumno); 
 
-alumnoRouter.get('/:id', getAlumno);
+alumnoRouter.get('/', cookieJwtAuthAlumno, getAlumno);
 
-alumnoRouter.get('/', getAlumnos);
+alumnoRouter.put('/', updateAlumno);
 
-alumnoRouter.put('/:id', updateAlumno);
-
-alumnoRouter.delete('/:id', deleteAlumno);
+alumnoRouter.delete('/', deleteAlumno);
 
 alumnoRouter.post('/login', loginAlumno);
 
