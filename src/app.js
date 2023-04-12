@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import db from './config/db.js';
 import indexRouter from './routes/index.route.js';  // /index.js?
 
 const app = express();  
@@ -23,3 +24,10 @@ app.use((err, req, res, next) => {
 app.listen(app.get('port'), () => {
     console.log(`Server on port ${app.get('port')}`);
 });
+
+db.getConnection()
+  .then(connection => {
+    console.log('Conexión con la base de datos exitosa');
+    connection.release();
+  })
+  .catch(error => console.error('Error de conexión con la base de datos', error));
