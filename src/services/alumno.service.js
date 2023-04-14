@@ -15,8 +15,15 @@ export async function createAlumno(alumno) {
 }
 
 export async function getAlumno(id) {
-    
+    const [result] = await db.query(`
+        SELECT id, rut, dv, apellidos, nombres, correo, id_curso
+        FROM alumno
+        WHERE id = ?
+        `, [id]);
+    const alumno = result[0];
+    return alumno;
 }
+
 
 export async function updateAlumno(id, alumno) {
     

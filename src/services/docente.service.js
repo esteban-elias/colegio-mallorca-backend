@@ -13,7 +13,13 @@ export async function createDocente(docente) {
 }
 
 export async function getDocente(id) {
-
+    const [result] = await db.query(`
+        SELECT id, rut, dv, apellidos, nombres, correo
+        FROM docente
+        WHERE id = ?
+        `, [id]);
+    const docente = result[0];
+    return docente;
 }
 
 export async function updateDocente(id, docente) {

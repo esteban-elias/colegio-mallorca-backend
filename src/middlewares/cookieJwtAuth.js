@@ -5,8 +5,8 @@ import { getDocente } from '../services/docente.service.js';
 export async function cookieJwtAuthAlumno(req, res, next) {
     const token = req.cookies.token;
     try {
-        const id = jwt.verify(token, process.env.JWT_SECRET);
-        const alumno = await getAlumno(id);
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const alumno = await getAlumno(decodedToken.id);
         req.alumno = alumno;
         next();
     } catch (err) {
@@ -18,8 +18,8 @@ export async function cookieJwtAuthAlumno(req, res, next) {
 export async function cookieJwtAuthDocente(req, res, next) {
     const token = req.cookies.token;
     try {
-        const id = jwt.verify(token, process.env.JWT_SECRET);
-        const docente = await getDocente(id);
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const docente = await getDocente(decodedToken.id);
         req.docente = docente;
         next();
     } catch (err) {

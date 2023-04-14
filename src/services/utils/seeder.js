@@ -8,7 +8,6 @@ async function generateInsertStatementsDocente() {
         console.log(`(${i}, '0', 'testing', 'docente${i}', 'docente${i}@testing.com', X'${passwordHex}'),`);
     }
 }
-console.log(generateInsertStatementsNota(2));
 
 async function generateInsertStatementsAlumno(idCurso) {
     for (let i = 1; i <= 20; i++) {
