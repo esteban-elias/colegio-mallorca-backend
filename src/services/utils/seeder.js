@@ -21,7 +21,7 @@ async function generateInsertStatementsAlumno(idCurso) {
 function generateInsertStatementsNota(idClase) {
     for (let n = 1; n <= 4; n++) {
       for (let i = 21; i <= 40; i++) {
-          const calificacion = Math.floor(Math.random() * 70 + 10)/10;
+          const calificacion = Math.floor(Math.random() * 60 + 10)/10;
           console.log(`(1, ${n}, 25, ${calificacion}, ${i}, ${idClase}),`);
       }
     }
