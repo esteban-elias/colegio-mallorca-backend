@@ -3,20 +3,22 @@ import { createAlumno,
          getAlumno,
          updateAlumno,
          deleteAlumno,
-         loginAlumno
+         loginAlumno,
+         getNotas
 } from "../controllers/alumno.controller.js";  // * as ???
 import { cookieJwtAuthAlumno } from '../middlewares/cookieJwtAuth.js';
 
 const alumnoRouter = Router();
 
 alumnoRouter.post('/', createAlumno); 
+alumnoRouter.post('/login', loginAlumno);
 
 alumnoRouter.get('/', cookieJwtAuthAlumno, getAlumno);
+alumnoRouter.get('/notas', cookieJwtAuthAlumno, getNotas);
 
 alumnoRouter.put('/', updateAlumno);
 
 alumnoRouter.delete('/', deleteAlumno);
 
-alumnoRouter.post('/login', loginAlumno);
 
 export default alumnoRouter;

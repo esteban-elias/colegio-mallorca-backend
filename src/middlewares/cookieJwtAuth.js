@@ -6,6 +6,9 @@ export async function cookieJwtAuthAlumno(req, res, next) {
     const token = req.cookies.token;
     try {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        if (decodedToken.type !== 'alumno') {
+            throw new Error('No autorizado');
+        }
         const alumno = await getAlumno(decodedToken.id);
         req.alumno = alumno;
         next();
@@ -19,6 +22,9 @@ export async function cookieJwtAuthDocente(req, res, next) {
     const token = req.cookies.token;
     try {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        if (decodedToken.type !== 'docente') {
+            throw new Error('No autorizado');
+        }
         const docente = await getDocente(decodedToken.id);
         req.docente = docente;
         next();

@@ -10,6 +10,12 @@ export function getAlumno(req, res) {
     res.json(alumno);
 }
 
+export async function getNotas(req, res) {
+    const alumno = req.alumno;
+    const notas = await alumnoServices.getNotas(alumno.id);   
+    res.json(notas);
+}
+
 export function updateAlumno(req, res) {
 
 }
@@ -22,7 +28,8 @@ export async function loginAlumno(req, res) {
     const { rut, contrasena } = req.body;
     try {
         const alumno = await alumnoServices.loginAlumno(rut, contrasena);
-        const token = jwt.sign({ id: alumno.id }, process.env.JWT_SECRET, {expiresIn: '1h'}) // 30m???
+        const token = jwt.sign({ id: alumno.id, type: 'alumno' },
+                                 process.env.JWT_SECRET, {expiresIn: '1h'}) // 30m???
         res.cookie("token", token, {
             httpOnly: true
         })

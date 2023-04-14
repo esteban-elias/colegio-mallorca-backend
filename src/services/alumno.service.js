@@ -24,6 +24,21 @@ export async function getAlumno(id) {
     return alumno;
 }
 
+export async function getNotas(id) {
+    const [result] = await db.query(`
+        SELECT asignatura.nombre AS asignatura, nota.numero, 
+        nota.porcentaje, nota.calificacion, 
+        CONCAT(docente.nombres, ' ', docente.apellidos) AS docente
+        FROM alumno 
+        INNER JOIN nota ON alumno.id=nota.id_alumno
+        INNER JOIN clase ON nota.id_clase=clase.id
+        INNER JOIN asignatura ON clase.id_asignatura=asignatura.id
+        INNER JOIN docente ON clase.id_docente=docente.id
+        WHERE alumno.id=?; 
+        `, [id]);
+    const notas = result;
+    return notas;
+}
 
 export async function updateAlumno(id, alumno) {
     

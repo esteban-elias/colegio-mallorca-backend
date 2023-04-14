@@ -11,6 +11,7 @@ import { cookieJwtAuthDocente } from '../middlewares/cookieJwtAuth.js';
 const docenteRouter = Router();
 
 docenteRouter.post('/', createDocente);
+docenteRouter.post('/login', loginDocente);
 
 docenteRouter.get('/', cookieJwtAuthDocente, getDocente);
 
@@ -18,6 +19,5 @@ docenteRouter.put('/', updateDocente);
 
 docenteRouter.delete('/', deleteDocente);
 
-docenteRouter.post('/login', loginDocente);
 
 export default docenteRouter;

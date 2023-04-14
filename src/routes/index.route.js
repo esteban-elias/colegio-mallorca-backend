@@ -7,7 +7,7 @@ const indexRouter = Router();
 const prefix = '/api';
 
 indexRouter.get(prefix, (req, res) => {
-    res.json({message: 'Bienvenido a la backend API del Colegio Mallorca!'});
+    res.json({message: 'Bienvenido a la backend API RESTful del Colegio Mallorca!'});
 });
 
 indexRouter.use(`${prefix}/alumno`, alumnoRouter);
