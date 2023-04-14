@@ -7,7 +7,7 @@ import indexRouter from './routes/index.route.js';  // /index.js?
 const app = express();  
 
 app.use(express.json());
-app.use(cors({credentials: true, origin: process.env.ORIGIN || 'http://localhost:5500'}));
+app.use(cors({credentials: true, origin: true}));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
