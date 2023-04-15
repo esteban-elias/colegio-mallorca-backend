@@ -4,7 +4,9 @@ import { createAlumno,
          updateAlumno,
          deleteAlumno,
          loginAlumno,
-         getNotas
+         getNotas,
+         getAsignaturas,
+         getRecursos
 } from "../controllers/alumno.controller.js";  // * as ???
 import { cookieJwtAuthAlumno } from '../middlewares/cookieJwtAuth.js';
 
@@ -15,6 +17,9 @@ alumnoRouter.post('/login', loginAlumno);
 
 alumnoRouter.get('/', cookieJwtAuthAlumno, getAlumno);
 alumnoRouter.get('/notas', cookieJwtAuthAlumno, getNotas);
+alumnoRouter.get('/asignaturas', cookieJwtAuthAlumno, getAsignaturas);
+alumnoRouter.get('/recursos/:idAsignatura', cookieJwtAuthAlumno, getRecursos);
+
 
 alumnoRouter.put('/', updateAlumno);
 

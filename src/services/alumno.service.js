@@ -34,10 +34,36 @@ export async function getNotas(id) {
         INNER JOIN clase ON nota.id_clase=clase.id
         INNER JOIN asignatura ON clase.id_asignatura=asignatura.id
         INNER JOIN docente ON clase.id_docente=docente.id
-        WHERE alumno.id=?; 
+        WHERE alumno.id=?
         `, [id]);
     const notas = result;
     return notas;
+}
+
+export async function getAsignaturas(id) {
+    const [result] = await db.query(`
+        SELECT asignatura.id, asignatura.nombre
+        FROM alumno
+        INNER JOIN curso ON alumno.id_curso=curso.id
+        INNER JOIN clase ON curso.id=clase.id_curso
+        INNER JOIN asignatura ON clase.id_asignatura=asignatura.id
+        WHERE alumno.id=?
+        `, [id]);
+    const asignaturas = result;
+    return asignaturas;
+}
+
+export async function getRecursos(idAlumno, idAsignatura) {
+    const [result] = await db.query(`
+        SELECT recurso.titulo, recurso.ubicacion
+        FROM alumno 
+        INNER JOIN curso ON alumno.id_curso=curso.id
+        INNER JOIN clase ON curso.id=clase.id_curso
+        INNER JOIN recurso ON clase.id=recurso.id_clase
+        WHERE alumno.id=? AND clase.id_asignatura=?
+    `, [idAlumno, idAsignatura]);
+    const recursos = result;
+    return recursos;
 }
 
 export async function updateAlumno(id, alumno) {

@@ -16,6 +16,19 @@ export async function getNotas(req, res) {
     res.json(notas);
 }
 
+export async function getAsignaturas(req, res) {
+    const alumno = req.alumno;
+    const asignaturas = await alumnoServices.getAsignaturas(alumno.id);   
+    res.json(asignaturas);
+}
+
+export async function getRecursos(req, res) {
+    const alumno = req.alumno;
+    const { idAsignatura } = req.params;
+    const recursos = await alumnoServices.getRecursos(alumno.id, idAsignatura);   
+    res.json(recursos);
+}
+
 export function updateAlumno(req, res) {
 
 }
