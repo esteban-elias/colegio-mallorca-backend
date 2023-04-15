@@ -55,11 +55,13 @@ export async function getAsignaturas(id) {
 
 export async function getRecursos(idAlumno, idAsignatura) {
     const [result] = await db.query(`
-        SELECT recurso.titulo, recurso.ubicacion
+        SELECT asignatura.nombre as asignatura, 
+        recurso.titulo, recurso.ubicacion
         FROM alumno 
         INNER JOIN curso ON alumno.id_curso=curso.id
         INNER JOIN clase ON curso.id=clase.id_curso
         INNER JOIN recurso ON clase.id=recurso.id_clase
+        INNER JOIN asignatura on clase.id_asignatura=asignatura.id
         WHERE alumno.id=? AND clase.id_asignatura=?
     `, [idAlumno, idAsignatura]);
     const recursos = result;

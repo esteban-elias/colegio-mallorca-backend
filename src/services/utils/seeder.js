@@ -18,14 +18,25 @@ async function generateInsertStatementsAlumno(idCurso) {
     }
 }
 
+/**
+ * 
+ * Por ahora: 
+ * - El primer valor será "1" (semestre)
+ * - Serán 4 notas, con un porcentaje de 25% cada una.
+ */
 function generateInsertStatementsNota(idClase) {
-    for (let n = 1; n <= 4; n++) {
-      for (let i = 21; i <= 40; i++) {
+    console.log(`INSERT INTO nota 
+(semestre, numero, porcentaje, calificacion, id_alumno, id_clase)
+VALUES`)
+    for (let numNota = 1; numNota <= 4; numNota++) {
+      for (let idAlumno = 21; idAlumno <= 40; idAlumno++) {
           const calificacion = Math.floor(Math.random() * 60 + 10)/10;
-          console.log(`(1, ${n}, 25, ${calificacion}, ${i}, ${idClase}),`);
+          console.log(`(1, ${numNota}, 25, ${calificacion}, ${idAlumno}, ${idClase}),`);
       }
     }
 }
+
+generateInsertStatementsNota(3)
 
 /*  
 VIEW clase
