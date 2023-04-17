@@ -1,36 +1,36 @@
 import bcrypt from 'bcrypt';
 import db from '../config/db.js';
 
-export async function createDocente(docente) {
-    const {
-        rut,
-        dv,
-        apellidos,
-        nombres,
-        correo,
-        contrasena
-    } = docente;
-}
+// export async function createDocente(docente) {
+//     const {
+//         rut,
+//         dv,
+//         apellidos,
+//         nombres,
+//         correo,
+//         contrasena
+//     } = docente;
+// }
 
 export async function getDocente(id) {
     const [result] = await db.query(`
         SELECT id, rut, dv, apellidos, nombres, correo
         FROM docente
         WHERE id = ?
-        `, [id]);
+    `, [id]);
     const docente = result[0];
     return docente;
 }
 
-export async function updateDocente(id, docente) {
+// export async function updateDocente(id, docente) {
             
-}
+// }
 
-export async function deleteDocente(id) {
+// export async function deleteDocente(id) {
     
-}
+// }
 
-export async function loginDocente(rut, contrasena) {
+export async function login(rut, contrasena) {
     const [result] = await db.query(`
         SELECT *
         FROM docente
