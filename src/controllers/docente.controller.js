@@ -7,6 +7,10 @@ import * as docenteServices from '../services/docente.service.js'
 
 export function getDocente(req, res) {
     const docente = req.docente;
+    if (docente.id != req.params.idDocente) {
+        res.status(403).json({message: 'No autorizado'});
+        return;
+    }
     res.json(docente);
 }  
 

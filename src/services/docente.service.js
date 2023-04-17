@@ -14,7 +14,7 @@ import db from '../config/db.js';
 
 export async function getDocente(id) {
     const [result] = await db.query(`
-        SELECT id, rut, dv, apellidos, nombres, correo
+        SELECT id, concat(rut, '-', dv) as rut, apellidos, nombres, correo
         FROM docente
         WHERE id = ?
     `, [id]);

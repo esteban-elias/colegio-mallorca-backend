@@ -5,7 +5,7 @@ import * as recursoControllers
   
 const recursoRouter = Router({mergeParams: true});
 
-// for clase
+// for alumno and docente
 recursoRouter.get('/', recursoControllers.getRecursos);
 
 export default recursoRouter;

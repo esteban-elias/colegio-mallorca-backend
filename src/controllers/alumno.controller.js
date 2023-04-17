@@ -7,9 +7,9 @@ import * as alumnoServices from '../services/alumno.service.js'
 
 export function getAlumno(req, res) {
   const alumno = req.alumno;
-  if (alumno.id != req.params.id) {
+  if (alumno.id != req.params.idAlumno) {
     res.status(403).json({message: 'No autorizado'});
-    return
+    return;
   }
   res.json(alumno);
 }
