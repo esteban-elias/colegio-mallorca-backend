@@ -1,31 +1,23 @@
 import { Router } from "express";
 import * as alumnoControllers from "../controllers/alumno.controller.js";  // * as ???
 import { cookieJwtAuthAlumno } from '../middlewares/cookieJwtAuth.js';
-import claseRouter from "./clase.route.js";
-import notaRouter from "./nota.route.js";
 
-const alumnoRouter = Router({mergeParams: true});
+const alumnoRouter = Router();
 
-// alumnoRouter.post('/', createAlumno); 
 alumnoRouter.post('/login',
                   alumnoControllers.login);
 
-// from docente/:idDocente/clase/:idClase/alumno
 alumnoRouter.get('/',
-                 alumnoControllers.getAlumnos);
-alumnoRouter.get('/:idAlumno',
                  cookieJwtAuthAlumno,
                  alumnoControllers.getAlumno);
-alumnoRouter.use('/:idAlumno/nota',
+alumnoRouter.get('/notas',
                  cookieJwtAuthAlumno,
-                 notaRouter);
-alumnoRouter.use('/:idAlumno/clase',
+                 alumnoControllers.getNotas);
+alumnoRouter.get('/clases',
                  cookieJwtAuthAlumno,
-                 claseRouter);
-
-// alumnoRouter.put('/', updateAlumno);
-
-// alumnoRouter.delete('/', deleteAlumno);
-
+                 alumnoControllers.getClases);
+alumnoRouter.get('/clases/:idClase/recursos',
+                 cookieJwtAuthAlumno,
+                 alumnoControllers.getRecursos);
 
 export default alumnoRouter;

@@ -11,26 +11,23 @@ Este es un proyecto de tercer semestre de informática. "Colegio Mallorca" es un
 
 ### Alumno
 
-Todos los endpoints relacionados con los alumnos se encuentran en la ruta `/api/alumno/`. Dependiendo del método HTTP utilizado, se realizan distintas acciones:
+**POST**:
+- `/api/alumno/login`: Recibe los campos `rut` (sin puntos ni dígito verificador) y `contrasena`. Si las credenciales son válidas, responde un JSON con los campos `id, rut, dv, apellidos, nombres, correo, id_curso` del alumno y se firma una cookie que codifica el ID del alumno.
 
-- **GET**: Retorna los campos `id, rut, dv, apellidos, nombres, correo, id_curso` del alumno autenticado.
-- **POST**: Por implementar.
-- **PUT**: Por implementar
-- **DELETE**: Por implementar
-
-#### Login
-
-La ruta `/api/alumno/login` recibe una petición POST con los campos `rut` y `contrasena`. Si las credenciales son válidas, se retorna un JSON con los campos `id, rut, dv, apellidos, nombres, correo, id_curso` del alumno y se firma una cookie que codifica el ID del alumno. Si las credenciales son inválidas, se retorna un mensaje de error.
+**GET**: 
+- `/api/alumno`: Responde los campos `id, rut, apellidos, nombres, correo, id_curso` del alumno.
+- `/api/alumno/notas`: Responde la lista de todas las notas del alumno. Cada elemento contiene los campos `asignatura, numero, porcentaje, calificacion`.
+- `/api/alumno/clases`: Responde la lista de todas las clases del alumno. Cada elemento contiene los campos `id, asignatura`.
+- `/api/alumno/clases/:idClase/recursos`: Responde la lista de todos los recursos pedagógicos de una clase. Cada elemento contiene los campos `titulo, ubicacion`.
 
 ### Docente
 
-Todos los endpoints relacionados con los docentes se encuentran en la ruta `/api/docente/`. Al igual que con los alumnos, las distintas acciones se realizan dependiendo del método HTTP utilizado:
+**POST**:
+- `/api/docente/login`: Recibe los campos `rut` (sin puntos ni dígito verificador) y `contrasena`. Si las credenciales son válidas, responde un JSON con los campos `id, rut, dv, apellidos, nombres, correo` del docente y se firma una cookie que codifica el ID del docente.
 
-- **GET**: Retorna los campos `id, rut, dv, apellidos, nombres, correo` del docente autenticado.
-- **POST**: Por implementar.
-- **PUT**: Por implementar
-- **DELETE**: Por implementar
-
-#### Login
-
-La ruta `/api/docente/login` funciona de la misma manera que `/api/alumno/login`. Recibe una petición POST con los campos `rut` y `contrasena`, y si las credenciales son válidas, se retorna un JSON con los campos `id, rut, dv, apellidos, nombres, correo` del docente y se firma una cookie que codifica el ID del docente. Si las credenciales son inválidas, se retorna un mensaje de error.
+**GET**:
+- `/api/docente`: Retorna los campos `id, rut, dv, apellidos, nombres, correo` del docente.
+- `/api/docente/clases`: Responde la lista de todas las clases del docente. Cada elemento contiene los campos `id, curso, asignatura`.
+- `/api/docente/clases/:idClase/recursos`: Responde la lista de todos los recursos pedagógicos de una clase. Cada elemento contiene los campos `titulo, ubicacion`.
+- `/api/docente/clases/:idClase/alumnos`: Responde la lista de todos los alumnos de una clase. Cada elemento contiene los campos `id, apellidos, nombres, rut`.
+- `/api/docente/clases/:idClase/alumnos/:idAlumno/notas`: Responde la lista de todos las notas del alumno de una clase. Cada elemento contiene los campos `numero, porcentaje, calificacion`.

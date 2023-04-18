@@ -1,50 +1,6 @@
 import bcrypt from 'bcrypt';
 import db from '../config/db.js';
 
-// export async function createAlumno(alumno) {
-//     const {
-//         rut,
-//         dv,
-//         apellidos,
-//         nombres,
-//         correo,
-//         contrasena,
-//         id_curso
-//     } = alumno;
-
-// }
-
-export async function getAlumno(id) {
-  const [result] = await db.query(`
-    SELECT id, concat(rut, '-', dv) as rut, apellidos, nombres, correo, id_curso
-    FROM alumno
-    WHERE id = ?
-    `, [id]);
-  const alumno = result[0];
-  return alumno;
-}
-
-// for docente
-export async function getAlumnos(idDocente, idClase) {
-  const [result] = await db.query(`
-    SELECT alumno.apellidos, alumno.nombres, CONCAT(alumno.rut, '-', alumno.dv)
-    FROM docente 
-    INNER JOIN clase ON docente.id=clase.id_docente
-    INNER JOIN curso ON clase.id_curso=curso.id
-    INNER JOIN alumno ON curso.id=alumno.id_curso
-    WHERE docente.id=? AND clase.id=?
-  `, [idDocente, idClase]);
-  const alumnos = result;
-  return alumnos;
-}
-
-// export async function updateAlumno(id, alumno) {
-    
-// }
-
-// export async function deleteAlumno(id) {
-    
-// }
 
 export async function login(rut, contrasena) {
   const [result] = await db.query(`
@@ -67,4 +23,56 @@ export async function login(rut, contrasena) {
     correo: alumno.correo,
     id_curso: alumno.id_curso
   };
+}
+
+export async function getAlumno(id) {
+  const [result] = await db.query(`
+    SELECT id, concat(rut, '-', dv) AS rut, apellidos, nombres, correo, id_curso
+    FROM alumno
+    WHERE id = ?
+    `, [id]);
+  const alumno = result[0];
+  return alumno;
+}
+
+export async function getNotas(id) {
+  const [result] = await db.query(`
+    SELECT asignatura.nombre AS asignatura, nota.numero, 
+    nota.porcentaje, nota.calificacion, 
+    CONCAT(docente.nombres, ' ', docente.apellidos) AS docente
+    FROM alumno 
+    INNER JOIN nota ON alumno.id=nota.id_alumno
+    INNER JOIN clase ON nota.id_clase=clase.id
+    INNER JOIN asignatura ON clase.id_asignatura=asignatura.id
+    INNER JOIN docente ON clase.id_docente=docente.id
+    WHERE alumno.id=?
+    `, [id]);
+  const notas = result;
+  return notas;
+}
+
+export async function getClases(id) {
+  const [result] = await db.query(`
+    SELECT clase.id, asignatura.nombre AS asignatura
+    FROM alumno
+    INNER JOIN curso ON alumno.id_curso=curso.id
+    INNER JOIN clase ON curso.id=clase.id_curso
+    INNER JOIN asignatura ON clase.id_asignatura=asignatura.id
+    WHERE alumno.id=?
+  `, [id]);
+  const clases = result;
+  return clases;
+}
+
+export async function getRecursos(idAlumno, idClase) {
+  const [result] = await db.query(`
+    SELECT recurso.titulo, recurso.ubicacion
+    FROM alumno
+    INNER JOIN curso ON alumno.id_curso=curso.id
+    INNER JOIN clase ON curso.id=clase.id_curso
+    INNER JOIN recurso ON clase.id=recurso.id_clase
+    WHERE alumno.id=? AND clase.id=?
+  `, [idAlumno, idClase]);
+  const recursos = result;
+  return recursos;
 }

@@ -36,18 +36,17 @@ VALUES`)
     }
 }
 
-generateInsertStatementsNota(3)
-
 /*  
 VIEW clase
-select concat(curso.nivel, curso.letra) as curso, asignatura.nombre, docente.nombres
+select clase.id as id_clase, concat(curso.nivel, curso.letra) as curso, 
+asignatura.nombre as asignatura, docente.id as id_docente, docente.nombres as docente
 from docente inner join clase on docente.id=clase.id_docente
 inner join asignatura on clase.id_asignatura=asignatura.id
 inner join curso on clase.id_curso=curso.id;
 
 
 VIEW alumno_curso_asignatura_docente
-select alumno.nombres, concat(curso.nivel, curso.letra) as curso, asignatura.nombre, docente.nombres
+select alumno.id, alumno.nombres, concat(curso.nivel, curso.letra) as curso, asignatura.nombre, docente.nombres
 from docente inner join clase on docente.id=clase.id_docente
 inner join asignatura on clase.id_asignatura=asignatura.id
 inner join curso on clase.id_curso=curso.id
