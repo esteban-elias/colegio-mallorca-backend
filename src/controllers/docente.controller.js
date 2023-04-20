@@ -43,6 +43,13 @@ export async function getAlumnos(req, res) {
 export async function getNotas(req, res) {
   const { idClase } = req.params;
   const { idAlumno } = req.params;
+  // Verificar que el alumno pertenezca a la clase del docente
+  const alumnos = await docenteServices.getAlumnos(req.docente.id,
+                                                   idClase);
+  const hasAlumno = alumnos.some(alumno => alumno.id == idAlumno);
+  if (!hasAlumno) {
+  return res.status(403).json({message: 'No autorizado'});
+  }
   const notas = await docenteServices.getNotas(req.docente.id, 
                                                idClase, idAlumno);
   res.json(notas);
