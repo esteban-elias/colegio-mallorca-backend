@@ -48,7 +48,7 @@ export async function getNotas(req, res) {
                                                    idClase);
   const hasAlumno = alumnos.some(alumno => alumno.id == idAlumno);
   if (!hasAlumno) {
-  return res.status(403).json({message: 'No autorizado'});
+    return res.status(403).json({message: 'No autorizado'});
   }
   const notas = await docenteServices.getNotas(req.docente.id, 
                                                idClase, idAlumno);

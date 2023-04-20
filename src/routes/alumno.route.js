@@ -1,6 +1,6 @@
 import { Router } from "express";
 import * as alumnoControllers from "../controllers/alumno.controller.js";  // * as ???
-import { cookieJwtAuthAlumno } from '../middlewares/cookieJwtAuth.js';
+import { cookieJwtAuth } from '../middlewares/cookieJwtAuth.js';
 
 const alumnoRouter = Router();
 
@@ -8,16 +8,16 @@ alumnoRouter.post('/login',
                   alumnoControllers.login);
 
 alumnoRouter.get('/',
-                 cookieJwtAuthAlumno,
+                 cookieJwtAuth,
                  alumnoControllers.getAlumno);
 alumnoRouter.get('/notas',
-                 cookieJwtAuthAlumno,
+                 cookieJwtAuth,
                  alumnoControllers.getNotas);
 alumnoRouter.get('/clases',
-                 cookieJwtAuthAlumno,
+                 cookieJwtAuth,
                  alumnoControllers.getClases);
 alumnoRouter.get('/clases/:idClase/recursos',
-                 cookieJwtAuthAlumno,
+                 cookieJwtAuth,
                  alumnoControllers.getRecursos);
 
 export default alumnoRouter;
