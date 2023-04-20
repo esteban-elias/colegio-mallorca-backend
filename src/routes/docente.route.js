@@ -21,6 +21,10 @@ docenteRouter.get('/clases/:idClase/alumnos',
                   docenteControllers.getAlumnos);
 docenteRouter.get('/clases/:idClase/alumnos/:idAlumno/notas',
                   cookieJwtAuthDocente,
-                  docenteControllers.getNotas)
+                  docenteControllers.getNotas);
+
+docenteRouter.post('/clases/:idClase/alumnos/:idAlumno/notas',
+                  cookieJwtAuthDocente,
+                  docenteControllers.createNota);
 
 export default docenteRouter;

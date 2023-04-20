@@ -86,3 +86,15 @@ export async function getNotas(idDocente, idClase, idAlumno) {
   const notas = result;
   return notas;
 }
+
+// El semestre, por ahora, está hardcodeado en 1
+export async function createNota(idClase, idAlumno, nota) {
+  const [result] = await db.query(`
+    INSERT INTO nota (numero, porcentaje, calificacion, 
+                      semestre, id_alumno, id_clase)
+    VALUES (?, ?, ?, ?, ?, ?);
+  `, [nota.numero, nota.porcentaje, 
+      nota.calificacion, 1, idAlumno, idClase]);
+  const id = result.insertId;
+  return id;
+}

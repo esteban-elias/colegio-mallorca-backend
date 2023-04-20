@@ -47,3 +47,18 @@ export async function getNotas(req, res) {
                                                idClase, idAlumno);
   res.json(notas);
 }
+
+export async function createNota(req, res) {
+  const { idClase } = req.params;
+  const { idAlumno } = req.params;
+  const { nota } = req.body;
+  // Verificar que el alumno pertenezca a la clase del docente
+  const alumnos = await docenteServices.getAlumnos(req.docente.id,
+                                                   idClase);
+  const hasAlumno = alumnos.some(alumno => alumno.id == idAlumno);
+  if (!hasAlumno) {
+    return res.status(403).json({message: 'No autorizado'});
+  }
+  const idNota = await docenteServices.createNota(idClase, idAlumno, nota);
+  res.json({id: idNota});
+}
