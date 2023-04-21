@@ -10,8 +10,8 @@ indexRouter.get(PREFIX, (req, res) => {
     res.json({message: 'Bienvenido a la backend API RESTful del Colegio Mallorca!'});
 });
 
-indexRouter.use(`${PREFIX}/alumno`, alumnoRouter);
+indexRouter.use(`${PREFIX}/alumnos`, alumnoRouter);
 
-indexRouter.use(`${PREFIX}/docente`, docenteRouter);
+indexRouter.use(`${PREFIX}/docentes`, docenteRouter);
 
 export default indexRouter;
