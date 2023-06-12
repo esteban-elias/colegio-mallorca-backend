@@ -1,13 +1,15 @@
 import bcrypt from 'bcrypt';
+import { RowDataPacket } from 'mysql2';
 import db from '../config/db.js';
+import { Alumno } from '../types.js';
 
 
-export async function login(rut, contrasena) {
-  const [result] = await db.query(`
+export async function login(rut: string, contrasena: string): Promise<Alumno> {
+  const [result]: Array<RowDataPacket> = await db.query(`
     SELECT *
     FROM alumno
     WHERE rut = ?
-    `, [rut]);
+    `, [rut]) as Array<RowDataPacket>;
   const alumno = result[0];
   const isValidPassword = await 
     bcrypt.compare(contrasena, alumno.contrasena.toString('utf8'));
@@ -21,11 +23,14 @@ export async function login(rut, contrasena) {
     apellidos: alumno.apellidos,
     nombres: alumno.nombres,
     correo: alumno.correo,
-    id_curso: alumno.id_curso
+    telefono: alumno.telefono,
+    fecha_nacimiento: alumno.fecha_nacimiento,
+    foto_ubicacion: alumno.foto_ubicacion,
+    direccion: alumno.direccion,
   };
 }
 
-export async function getAlumno(id) {
+export async function getAlumno(id: number) {
   const [result] = await db.query(`
     SELECT id, concat(rut, '-', dv) AS rut, apellidos, nombres, correo, id_curso
     FROM alumno
@@ -35,7 +40,7 @@ export async function getAlumno(id) {
   return alumno;
 }
 
-export async function getNotas(id) {
+export async function getNotas(id: number) {
   const [result] = await db.query(`
     SELECT asignatura.nombre AS asignatura, nota.numero, 
     nota.porcentaje, nota.calificacion, 
@@ -51,7 +56,7 @@ export async function getNotas(id) {
   return notas;
 }
 
-export async function getClases(id) {
+export async function getClases(id: number) {
   const [result] = await db.query(`
     SELECT clase.id, asignatura.nombre AS asignatura
     FROM alumno
@@ -64,7 +69,7 @@ export async function getClases(id) {
   return clases;
 }
 
-export async function getRecursos(idAlumno, idClase) {
+export async function getRecursos(idAlumno: number, idClase: number) {
   const [result] = await db.query(`
     SELECT recurso.titulo, recurso.ubicacion
     FROM alumno

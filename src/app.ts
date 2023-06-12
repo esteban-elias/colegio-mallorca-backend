@@ -1,4 +1,4 @@
-import express, { ErrorRequestHandler } from 'express';
+import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import db from './config/db';
@@ -15,16 +15,10 @@ app.set('port', process.env.PORT || 3000);
 
 app.use('/', indexRouter);
 
-const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-  console.error(err.stack);
-  res.status(500).send('Algo ocurrió!');
-};
-
-app.use(errorHandler);
-
 app.listen(app.get('port'), () => {
   console.log(`Server on port ${app.get('port')}`);
 });
+
 
 db.getConnection()
   .then((connection) => {
