@@ -1,0 +1,13 @@
+{
+  "parserOptions": {
+     "project": "./tsconfig.json"
+  },
+  "extends": ["./node_modules/ts-standard/eslintrc.json"],
+  "rules": {
+     "semi": "off",
+     "@typescript-eslint/semi": ["error", "always"],
+     "@typescript-eslint/array-type": ["error", { "default": "generic" }],
+     "comma-dangle": "off",
+     "@typescript-eslint/comma-dangle": ["error", "only-multiline"]
+  }
+}

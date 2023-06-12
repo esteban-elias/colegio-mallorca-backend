@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import * as alumnoServices from '../services/alumno.service.js'
+import * as alumnoServices from '../services/alumno.service'
 
 
 export async function login(req, res) {

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { getAlumno } from '../services/alumno.service.js';
-import { getDocente } from '../services/docente.service.js';
+import { getAlumno } from '../services/alumno.service';
+import { getDocente } from '../services/docente.service';
 
 export async function cookieJwtAuth(req, res, next) {
     const token = req.cookies.token;

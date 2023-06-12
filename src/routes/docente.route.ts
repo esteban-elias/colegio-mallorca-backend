@@ -1,6 +1,6 @@
 import { Router } from "express";
-import * as docenteControllers from "../controllers/docente.controller.js";  // * as ???
-import { cookieJwtAuth } from '../middlewares/cookieJwtAuth.js';
+import * as docenteControllers from "../controllers/docente.controller";  // * as ???
+import { cookieJwtAuth } from '../middlewares/cookieJwtAuth';
 
 
 const docenteRouter = Router();

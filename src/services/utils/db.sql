@@ -1,3 +1,6 @@
+-- -----------------------------------------------------
+-- Table `colegio_mallorca`.`alumno`
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`alumno` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `rut` INT NOT NULL,
@@ -11,8 +14,7 @@ CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`alumno` (
   `foto_ubicacion` VARCHAR(1024) NULL,
   `direccion` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `rut_UNIQUE` (`rut` ASC) VISIBLE,
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  UNIQUE INDEX `rut_UNIQUE` (`rut` ASC) VISIBLE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -25,7 +27,6 @@ CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`asignatura` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `nombre_UNIQUE` (`nombre` ASC) VISIBLE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -39,8 +40,7 @@ CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`curso` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `nivel` INT NOT NULL,
   `letra` CHAR(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -63,8 +63,7 @@ CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`docente` (
   `direccion` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `correo_UNIQUE` (`correo` ASC) VISIBLE,
-  UNIQUE INDEX `rut_UNIQUE` (`rut` ASC) VISIBLE,
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  UNIQUE INDEX `rut_UNIQUE` (`rut` ASC) VISIBLE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8mb4
@@ -80,8 +79,7 @@ CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`clase` (
   `id_asignatura` INT UNSIGNED NOT NULL,
   `id_docente` INT UNSIGNED NOT NULL,
   `ano` YEAR NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -99,9 +97,7 @@ CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`nota` (
   `semestre` INT UNSIGNED NOT NULL,
   `id_alumno` INT UNSIGNED NOT NULL,
   `id_asignatura` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
-  UNIQUE INDEX `numero_UNIQUE` (`numero` ASC) VISIBLE)
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -115,7 +111,6 @@ CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`recurso` (
   `titulo` VARCHAR(45) NOT NULL,
   `ubicacion` VARCHAR(1024) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `titulo_UNIQUE` (`titulo` ASC) VISIBLE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -130,9 +125,7 @@ CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`alumno_curso` (
   `id_alumno` INT UNSIGNED NOT NULL,
   `id_curso` INT UNSIGNED NOT NULL,
   `ano` YEAR NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
-  UNIQUE INDEX `ano_UNIQUE` (`ano` ASC) VISIBLE)
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
@@ -144,8 +137,7 @@ CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`bloque` (
   `dia` VARCHAR(10) NOT NULL,
   `hora_inicio` TIME NOT NULL,
   `hora_termino` TIME NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
@@ -157,7 +149,6 @@ CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`sala` (
   `codigo` VARCHAR(15) NOT NULL,
   `capacidad` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `codigo_UNIQUE` (`codigo` ASC) VISIBLE)
 ENGINE = InnoDB;
 
@@ -170,8 +161,7 @@ CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`clase_bloque_sala` (
   `id_bloque` INT UNSIGNED NOT NULL,
   `id_sala` INT UNSIGNED NOT NULL,
   `id_clase` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
@@ -182,8 +172,7 @@ CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`recurso_clase` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `id_recurso` INT UNSIGNED NOT NULL,
   `id_clase` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
@@ -194,6 +183,5 @@ CREATE TABLE IF NOT EXISTS `colegio_mallorca`.`recurso_asignatura` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `id_recurso` INT UNSIGNED NOT NULL,
   `id_asignatura` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
