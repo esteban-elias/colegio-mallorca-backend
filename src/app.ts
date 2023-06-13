@@ -19,7 +19,6 @@ app.listen(app.get('port'), () => {
   console.log(`Server on port ${app.get('port')}`);
 });
 
-
 db.getConnection()
   .then((connection) => {
     console.log('Conexión con la base de datos exitosa');

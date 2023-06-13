@@ -1,13 +1,36 @@
 {
   "parserOptions": {
-     "project": "./tsconfig.json"
+    "project": "./tsconfig.json"
   },
   "extends": ["./node_modules/ts-standard/eslintrc.json"],
   "rules": {
-     "semi": "off",
-     "@typescript-eslint/semi": ["error", "always"],
-     "@typescript-eslint/array-type": ["error", { "default": "generic" }],
-     "comma-dangle": "off",
-     "@typescript-eslint/comma-dangle": ["error", "only-multiline"]
+    "semi": "off",
+    "@typescript-eslint/semi": ["error", "always"],
+    "@typescript-eslint/array-type": [
+      "error",
+      { "default": "generic" }
+    ],
+    "comma-dangle": "off",
+    "@typescript-eslint/comma-dangle": ["error", "only-multiline"],
+    "@typescript-eslint/member-delimiter-style": [
+      "error",
+      {
+        "multiline": {
+          "delimiter": "semi",
+          "requireLast": true
+        },
+        "singleline": {
+          "delimiter": "semi",
+          "requireLast": false
+        }
+      }
+    ],
+    "space-before-function-paren": "off",
+    "@typescript-eslint/space-before-function-paren": [
+      "error",
+      "never"
+    ],
+    "indent": "off",
+    "@typescript-eslint/indent": "off" 
   }
 }
