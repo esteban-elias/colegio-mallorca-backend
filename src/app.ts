@@ -11,12 +11,18 @@ app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-app.set('port', process.env.PORT || 3000);
+const PORT: string =
+  process.env.PORT !== undefined &&
+  process.env.PORT.trim() !== ''
+    ? process.env.PORT
+    : '3000';
+
+app.set('port', PORT);
 
 app.use('/', indexRouter);
 
 app.listen(app.get('port'), () => {
-  console.log(`Server on port ${app.get('port')}`);
+  console.log(`Server on port ${app.get('port') as string}`);
 });
 
 db.getConnection()

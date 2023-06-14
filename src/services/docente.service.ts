@@ -9,41 +9,41 @@ import {
   Nota,
   NotaForCreation,
   Recurso,
+  LoginRequestBody
 } from '../types';
 
+/**
+ * Autentica a un docente utilizando su RUT y contraseña.
+ * @param rut - El RUT del docente. Este es un string que representa el Rol Único Tributario del docente.
+ * @param contrasena - La contraseña del docente. Esta es una cadena de texto que representa la contraseña del docente.
+ * @returns - Si la autenticación es exitosa, devuelve el ID del docente como una promesa de número. Si el docente no se encuentra, o la contraseña es incorrecta, se lanza un error.
+ *
+ * @throws {Error} Si el docente no se encuentra en la base de datos, se lanza un error con el mensaje 'Docente no encontrado'.
+ * @throws {Error} Si la contraseña proporcionada no coincide con la registrada en la base de datos, se lanza un error con el mensaje 'Contraseña incorrecta'.
+ */
 export async function login(
-  rut: string,
-  contrasena: string
-): Promise<DocenteForSelf> {
+  loginRequestBody: LoginRequestBody
+): Promise<number> {
   const [result]: Array<RowDataPacket> = (await db.query(
     `
-    SELECT rut, dv, apellidos, nombres, correo, telefono,
-    foto_ubicacion, contrasena 
+    SELECT id, contrasena
     FROM docente
     WHERE rut = ?
     `,
-    [rut]
+    [loginRequestBody.rut]
   )) as Array<RowDataPacket>;
   const docente: DocenteForLogin | undefined = result[0];
   if (docente === undefined) {
-    throw new Error('docente no encontrado');
+    throw new Error('Docente no encontrado');
   }
   const isValidPassword = await bcrypt.compare(
-    contrasena,
+    loginRequestBody.contrasena,
     docente.contrasena.toString('utf8')
   );
   if (!isValidPassword) {
     throw new Error('Contraseña incorrecta');
   }
-  return {
-    rut: docente.rut,
-    dv: docente.dv,
-    apellidos: docente.apellidos,
-    nombres: docente.nombres,
-    correo: docente.correo,
-    telefono: docente.telefono,
-    foto_ubicacion: docente.foto_ubicacion,
-  };
+  return docente.id;
 }
 
 export async function getDocenteById(
@@ -58,7 +58,7 @@ export async function getDocenteById(
     `,
     [id]
   )) as Array<RowDataPacket>;
-  const docente: DocenteForLogin | undefined = result[0];
+  const docente: DocenteForSelf | undefined = result[0];
   if (docente === undefined) {
     throw new Error('docente no encontrado');
   }

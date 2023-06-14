@@ -7,41 +7,41 @@ import {
   Nota,
   ClaseForAlumno,
   Recurso,
+  LoginRequestBody,
 } from '../types';
 
+/**
+ * Autentica a un alumno utilizando su RUT y contraseña.
+ * @param rut - El RUT del alumno. Este es un string que representa el Rol Único Tributario del alumno.
+ * @param contrasena - La contraseña del alumno. Esta es una cadena de texto que representa la contraseña del alumno.
+ * @returns - Si la autenticación es exitosa, devuelve el ID del alumno como una promesa de número. Si el alumno no se encuentra, o la contraseña es incorrecta, se lanza un error.
+ *
+ * @throws {Error} Si el alumno no se encuentra en la base de datos, se lanza un error con el mensaje 'Alumno no encontrado'.
+ * @throws {Error} Si la contraseña proporcionada no coincide con la registrada en la base de datos, se lanza un error con el mensaje 'Contraseña incorrecta'.
+ */
 export async function login(
-  rut: string,
-  contrasena: string
-): Promise<AlumnoForSelf> {
+  loginRequestBody: LoginRequestBody
+): Promise<number> {
   const [result] = (await db.query(
     `
-    SELECT rut, dv, apellidos, nombres, correo, telefono,
-    foto_ubicacion, contresena
+    SELECT id, contrasena
     FROM alumno
     WHERE rut = ?
     `,
-    [rut]
+    [loginRequestBody.rut]
   )) as Array<RowDataPacket>;
   const alumno: AlumnoForLogin | undefined = result[0];
   if (alumno === undefined) {
     throw new Error('Alumno no encontrado');
   }
   const isValidPassword = await bcrypt.compare(
-    contrasena,
+    loginRequestBody.contrasena,
     alumno.contrasena.toString('utf8')
   );
   if (!isValidPassword) {
     throw new Error('Contraseña incorrecta');
   }
-  return {
-    rut: alumno.rut,
-    dv: alumno.dv,
-    apellidos: alumno.apellidos,
-    nombres: alumno.nombres,
-    correo: alumno.correo,
-    telefono: alumno.telefono,
-    foto_ubicacion: alumno.foto_ubicacion,
-  };
+  return alumno.id;
 }
 
 export async function getAlumnoById(
@@ -142,9 +142,7 @@ export async function getRecursosByClaseId(
     [id]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new Error(
-      'Clase no encontrada o sin recursos registrados'
-    );
+    throw new Error('Clase no encontrada o sin recursos registrados');
   }
   const recursos: Array<Recurso> = result.map(
     (recurso: RowDataPacket) => {

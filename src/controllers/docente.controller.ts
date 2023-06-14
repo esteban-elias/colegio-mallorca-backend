@@ -6,7 +6,7 @@ export async function login(req, res) {
   const { rut, contrasena } = req.body;
   try {
     const docente = await docenteServices.login(rut, contrasena);
-    const token = jwt.sign({ id: docente.id, type: 'docente' }, 
+    const token = jwt.sign({ id: docente.id, role: 'docente' }, 
                             process.env.JWT_SECRET, {expiresIn: '1h'}) // 30m???
     res.cookie("token", token, {
         httpOnly: true

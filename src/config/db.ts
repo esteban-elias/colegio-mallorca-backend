@@ -3,12 +3,15 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const databaseUrl = process.env.DATABASE_URL;
+const DATABASE_URL = process.env.DATABASE_URL;
 
-if (typeof databaseUrl === 'undefined') {
+if (
+  DATABASE_URL === undefined ||
+  DATABASE_URL.trim() === ''
+) {
   throw new Error('Database URL no definida');
 }
 
-const pool = createPool(databaseUrl);
+const pool = createPool(DATABASE_URL);
 
 export default pool;

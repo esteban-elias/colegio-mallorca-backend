@@ -8,7 +8,8 @@ export interface AlumnoForSelf {
   foto_ubicacion?: string;
 }
 
-export interface AlumnoForLogin extends AlumnoForSelf {
+export interface AlumnoForLogin {
+  id: number;
   contrasena: Buffer;
 }
 
@@ -16,6 +17,26 @@ export type AlumnoForDocente = Omit<
   AlumnoForSelf,
   'rut' | 'dv' | 'telefono'
 >;
+
+export interface DocenteForSelf {
+  rut: string;
+  dv: string;
+  apellidos: string;
+  nombres: string;
+  correo?: string;
+  telefono?: string;
+  foto_ubicacion?: string;
+}
+
+export interface DocenteForLogin {
+  id: number;
+  contrasena: Buffer;
+}
+
+export interface LoginRequestBody {
+  rut: string;
+  contrasena: string;
+}
 
 export interface Nota {
   asignatura: string;
@@ -48,16 +69,9 @@ export interface Recurso {
   ubicacion: string;
 }
 
-export interface DocenteForSelf {
-  rut: string;
-  dv: string;
-  apellidos: string;
-  nombres: string;
-  correo?: string;
-  telefono?: string;
-  foto_ubicacion?: string;
-}
+export type Role = 'alumno' | 'docente';
 
-export interface DocenteForLogin extends DocenteForSelf {
-  contrasena: Buffer;
+export interface Payload {
+  id: number;
+  role: Role;
 }
