@@ -1,6 +1,6 @@
-import bcrypt from 'bcrypt';
-import { RowDataPacket } from 'mysql2';
-import db from '../config/db';
+import bcrypt from "bcrypt";
+import { RowDataPacket } from "mysql2";
+import db from "../config/db";
 import {
   AlumnoForSelf,
   AlumnoForLogin,
@@ -8,7 +8,7 @@ import {
   ClaseForAlumno,
   Recurso,
   LoginRequestBody,
-} from '../types';
+} from "../types";
 
 /**
  * Autentica a un alumno utilizando su RUT y contraseña.
@@ -19,9 +19,7 @@ import {
  * @throws {Error} Si el alumno no se encuentra en la base de datos, se lanza un error con el mensaje 'Alumno no encontrado'.
  * @throws {Error} Si la contraseña proporcionada no coincide con la registrada en la base de datos, se lanza un error con el mensaje 'Contraseña incorrecta'.
  */
-export async function login(
-  loginRequestBody: LoginRequestBody
-): Promise<number> {
+export async function login(loginRequestBody: LoginRequestBody) {
   const [result] = (await db.query(
     `
     SELECT id, contrasena
@@ -32,21 +30,19 @@ export async function login(
   )) as Array<RowDataPacket>;
   const alumno: AlumnoForLogin | undefined = result[0];
   if (alumno === undefined) {
-    throw new Error('Alumno no encontrado');
+    throw new Error("Alumno no encontrado");
   }
   const isValidPassword = await bcrypt.compare(
     loginRequestBody.contrasena,
-    alumno.contrasena.toString('utf8')
+    alumno.contrasena.toString("utf8")
   );
   if (!isValidPassword) {
-    throw new Error('Contraseña incorrecta');
+    throw new Error("Contraseña incorrecta");
   }
   return alumno.id;
 }
 
-export async function getAlumnoById(
-  id: number
-): Promise<AlumnoForSelf> {
+export async function getAlumnoById(id: number) {
   const [result] = (await db.query(
     `
     SELECT rut, dv, apellidos, nombres, correo, telefono, 
@@ -58,22 +54,12 @@ export async function getAlumnoById(
   )) as Array<RowDataPacket>;
   const alumno: AlumnoForSelf | undefined = result[0];
   if (alumno === undefined) {
-    throw new Error('Alumno no encontrado');
+    throw new Error("Alumno no encontrado");
   }
-  return {
-    rut: alumno.rut,
-    dv: alumno.dv,
-    apellidos: alumno.apellidos,
-    nombres: alumno.nombres,
-    correo: alumno.correo,
-    telefono: alumno.telefono,
-    foto_ubicacion: alumno.foto_ubicacion,
-  };
+  return alumno;
 }
 
-export async function getNotasByAlumnoId(
-  id: number
-): Promise<Array<Nota>> {
+export async function getNotasByAlumnoId(id: number) {
   const [result] = (await db.query(
     `
     select asignatura.nombre, nota.numero, nota.porcentaje,
@@ -86,7 +72,7 @@ export async function getNotasByAlumnoId(
     [id]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new Error('Alumno no encontrado o sin notas registradas');
+    throw new Error("Alumno no encontrado o sin notas registradas");
   }
   const notas: Array<Nota> = result.map((nota: RowDataPacket) => {
     return {
@@ -99,9 +85,7 @@ export async function getNotasByAlumnoId(
   return notas;
 }
 
-export async function getClasesByAlumnoId(
-  id: number
-): Promise<Array<ClaseForAlumno>> {
+export async function getClasesByAlumnoId(id: number) {
   const [result] = (await db.query(
     `
     select clase.id, asignatura.nombre as asignatura
@@ -115,7 +99,7 @@ export async function getClasesByAlumnoId(
     [id]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new Error('Alumno no encontrado o sin clases registradas');
+    throw new Error("Alumno no encontrado o sin clases registradas");
   }
   const clases: Array<ClaseForAlumno> = result.map(
     (clase: RowDataPacket) => {
@@ -128,9 +112,7 @@ export async function getClasesByAlumnoId(
   return clases;
 }
 
-export async function getRecursosByClaseId(
-  id: number
-): Promise<Array<Recurso>> {
+export async function getRecursosByClaseId(id: number) {
   const [result]: Array<RowDataPacket> = (await db.query(
     `
     select recurso.titulo, recurso.ubicacion
@@ -142,7 +124,7 @@ export async function getRecursosByClaseId(
     [id]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new Error('Clase no encontrada o sin recursos registrados');
+    throw new Error("Clase no encontrada o sin recursos registrados");
   }
   const recursos: Array<Recurso> = result.map(
     (recurso: RowDataPacket) => {
@@ -155,9 +137,7 @@ export async function getRecursosByClaseId(
   return recursos;
 }
 
-export async function getRecursosByAsignaturaId(
-  id: number
-): Promise<Array<Recurso>> {
+export async function getRecursosByAsignaturaId(id: number) {
   const [result]: Array<RowDataPacket> = (await db.query(
     `
     select recurso.titulo, recurso.ubicacion
@@ -171,7 +151,7 @@ export async function getRecursosByAsignaturaId(
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
     throw new Error(
-      'Asignatura no encontrada o sin recursos registrados'
+      "Asignatura no encontrada o sin recursos registrados"
     );
   }
   const recursos: Array<Recurso> = result.map(

@@ -1,36 +1,36 @@
 import { Router } from 'express';
 import * as docenteControllers from '../controllers/docente.controller'; // * as ???
-import { cookieJwtAuth } from '../middlewares/auth';
+import { verifyToken } from '../middlewares/auth';
 
 const docenteRouter = Router();
 
 docenteRouter.post('/login', docenteControllers.login);
 
-docenteRouter.get('/', cookieJwtAuth, docenteControllers.getDocente);
+docenteRouter.get('/', verifyToken, docenteControllers.getDocente);
 docenteRouter.get(
   '/clases',
-  cookieJwtAuth,
+  verifyToken,
   docenteControllers.getClases
 );
 docenteRouter.get(
   '/clases/:idClase/recursos',
-  cookieJwtAuth,
+  verifyToken,
   docenteControllers.getRecursos
 );
 docenteRouter.get(
   '/clases/:idClase/alumnos',
-  cookieJwtAuth,
+  verifyToken,
   docenteControllers.getAlumnos
 );
 docenteRouter.get(
   '/clases/:idClase/alumnos/:idAlumno/notas',
-  cookieJwtAuth,
+  verifyToken,
   docenteControllers.getNotas
 );
 
 docenteRouter.post(
   '/clases/:idClase/alumnos/:idAlumno/notas',
-  cookieJwtAuth,
+  verifyToken,
   docenteControllers.createNota
 );
 
