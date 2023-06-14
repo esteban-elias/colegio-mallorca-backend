@@ -4,7 +4,7 @@ import {
   NextFunction,
 } from 'express-serve-static-core';
 import jwt from 'jsonwebtoken';
-import { Payload } from '../types';
+import { DecodedToken } from '../types';
 
 export function verifyToken(
   req: Request,
@@ -16,17 +16,16 @@ export function verifyToken(
     throw new Error('JWT_SECRET no definida');
   }
   const token = req.cookies.token;
-
   if (token === undefined) {
-    return res.status(401).json({ message: 'No autorizado' });
+    return void res.status(401).json({ message: 'No autorizado' });
   }
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET) as DecodedToken;
     if (decoded.role === 'alumno') {
-      req.alumno = decoded as Payload;
+      req.alumno = decoded;
       next();
     } else if (decoded.role === 'docente') {
-      req.docente = decoded as Payload;
+      req.docente = decoded;
       next();
     } else {
       throw new Error('No autorizado');
@@ -38,7 +37,6 @@ export function verifyToken(
 }
 
 // TODO:
-// - console.log de `decoded` para ver su contenido y tipos
 // - Deberia importar `express-serve-static-core` en todos los modulos?
 // - Deberia reemplazar todos mis `throw new Error` por un
 //   `return res.status...`?

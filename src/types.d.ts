@@ -75,3 +75,17 @@ export interface Payload {
   id: number;
   role: Role;
 }
+
+export interface DecodedToken extends Payload {
+  iat: number;
+  exp: number;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      alumno?: DecodedToken;
+      docente?: DecodedToken;
+    }
+  }
+}
