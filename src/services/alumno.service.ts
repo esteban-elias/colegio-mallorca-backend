@@ -1,6 +1,6 @@
-import bcrypt from "bcrypt";
-import { RowDataPacket } from "mysql2";
-import db from "../config/db";
+import bcrypt from 'bcrypt';
+import { RowDataPacket } from 'mysql2';
+import db from '../config/db';
 import {
   AlumnoForSelf,
   AlumnoForLogin,
@@ -8,7 +8,8 @@ import {
   ClaseForAlumno,
   Recurso,
   LoginRequestBody,
-} from "../types";
+  BloqueHorario,
+} from '../types';
 
 /**
  * Autentica a un alumno utilizando su RUT y contraseña.
@@ -30,14 +31,14 @@ export async function login(loginRequestBody: LoginRequestBody) {
   )) as Array<RowDataPacket>;
   const alumno: AlumnoForLogin | undefined = result[0];
   if (alumno === undefined) {
-    throw new Error("Alumno no encontrado");
+    throw new Error('Alumno no encontrado');
   }
   const isValidPassword = await bcrypt.compare(
     loginRequestBody.contrasena,
-    alumno.contrasena.toString("utf8")
+    alumno.contrasena.toString('utf8')
   );
   if (!isValidPassword) {
-    throw new Error("Contraseña incorrecta");
+    throw new Error('Contraseña incorrecta');
   }
   return alumno.id;
 }
@@ -54,7 +55,7 @@ export async function getAlumnoById(id: number) {
   )) as Array<RowDataPacket>;
   const alumno: AlumnoForSelf | undefined = result[0];
   if (alumno === undefined) {
-    throw new Error("Alumno no encontrado");
+    throw new Error('Alumno no encontrado');
   }
   return alumno;
 }
@@ -72,7 +73,7 @@ export async function getNotasByAlumnoId(id: number) {
     [id]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new Error("Alumno no encontrado o sin notas registradas");
+    throw new Error('Alumno no encontrado o sin notas registradas');
   }
   const notas: Array<Nota> = result.map((nota: RowDataPacket) => {
     return {
@@ -88,18 +89,20 @@ export async function getNotasByAlumnoId(id: number) {
 export async function getClasesByAlumnoId(id: number) {
   const [result] = (await db.query(
     `
-    select clase.id, asignatura.nombre as asignatura
+    select clase.id, asignatura.nombre as asignatura, 
+    concat(docente.nombres, ' ', docente.apellidos) as docente
     from alumno
     inner join alumno_curso on alumno.id=alumno_curso.id_alumno
     inner join curso on alumno_curso.id_curso=curso.id
     inner join clase on curso.id=clase.id_curso
     inner join asignatura on clase.id_asignatura=asignatura.id
+    inner join docente on clase.id_docente=docente.id
     where alumno.id = ?
     `,
     [id]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new Error("Alumno no encontrado o sin clases registradas");
+    throw new Error('Alumno no encontrado o sin clases registradas');
   }
   const clases: Array<ClaseForAlumno> = result.map(
     (clase: RowDataPacket) => {
@@ -124,7 +127,7 @@ export async function getRecursosByClaseId(id: number) {
     [id]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new Error("Clase no encontrada o sin recursos registrados");
+    throw new Error('Clase no encontrada o sin recursos registrados');
   }
   const recursos: Array<Recurso> = result.map(
     (recurso: RowDataPacket) => {
@@ -151,7 +154,7 @@ export async function getRecursosByAsignaturaId(id: number) {
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
     throw new Error(
-      "Asignatura no encontrada o sin recursos registrados"
+      'Asignatura no encontrada o sin recursos registrados'
     );
   }
   const recursos: Array<Recurso> = result.map(
@@ -163,4 +166,41 @@ export async function getRecursosByAsignaturaId(id: number) {
     }
   );
   return recursos;
+}
+
+export async function getHorarioByAlumnoId(id: number) {
+  const [result]: Array<RowDataPacket> = (await db.query(
+    `
+    select bloque.dia, bloque.hora_inicio, bloque.hora_termino,
+    sala.codigo as sala, asignatura.nombre as asignatura,
+    concat(docente.nombres, ' ', docente.apellidos) as docente
+    from alumno
+    inner join alumno_curso on alumno.id=alumno_curso.id_alumno
+    inner join curso on alumno_curso.id_curso=curso.id
+    inner join clase on curso.id=clase.id_curso
+    inner join asignatura on clase.id_asignatura=asignatura.id
+    inner join docente on clase.id_docente=docente.id
+    inner join clase_bloque_sala on clase.id=clase_bloque_sala.id_clase
+    inner join bloque on clase_bloque_sala.id_bloque=bloque.id
+    inner join sala on clase_bloque_sala.id_sala=sala.id
+    where alumno.id = ?
+    `,
+    [id]
+  )) as Array<RowDataPacket>;
+  if (result.length === 0) {
+    throw new Error('Alumno no encontrado o sin horario registrado');
+  }
+  const horario: Array<BloqueHorario> = result.map(
+    (bloque: RowDataPacket) => {
+      return {
+        dia: bloque.dia,
+        hora_inicio: bloque.hora_inicio,
+        hora_termino: bloque.hora_termino,
+        sala: bloque.sala,
+        asignatura: bloque.asignatura,
+        docente: bloque.docente,
+      };
+    }
+  );
+  return horario;
 }

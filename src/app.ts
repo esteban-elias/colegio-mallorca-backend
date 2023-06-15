@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { ErrorRequestHandler } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import db from './config/db';
@@ -12,14 +12,20 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 const PORT: string =
-  process.env.PORT !== undefined &&
-  process.env.PORT.trim() !== ''
+  process.env.PORT !== undefined && process.env.PORT.trim() !== ''
     ? process.env.PORT
     : '3000';
 
 app.set('port', PORT);
 
 app.use('/', indexRouter);
+
+const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Error inesperado' });
+};
+
+app.use(errorHandler);
 
 app.listen(app.get('port'), () => {
   console.log(`Server on port ${app.get('port') as string}`);

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import alumnoRouter from './alumno.route';
-import docenteRouter from './docente.route';
+// import docenteRouter from './docente.route';
 
 const indexRouter = Router();
 
@@ -12,6 +12,6 @@ indexRouter.get(PREFIX, (_req, res) => {
 
 indexRouter.use(`${PREFIX}/alumnos`, alumnoRouter);
 
-indexRouter.use(`${PREFIX}/docentes`, docenteRouter);
+// indexRouter.use(`${PREFIX}/docentes`, docenteRouter);
 
 export default indexRouter;

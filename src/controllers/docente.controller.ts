@@ -1,36 +1,36 @@
-import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import * as docenteServices from "../services/docente.service.js";
-import { toLoginRequestBody } from "./utils/validations.js";
-import { LoginRequestBody, Payload } from "../types.js";
+import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import * as docenteServices from '../services/docente.service.js';
+import { toLoginRequestBody } from './utils/validations.js';
+import { LoginRequestBody, Payload } from '../types.js';
 
 export async function login(req: Request, res: Response) {
   const JWT_SECRET = process.env.JWT_SECRET;
   const JWT_EXPIRATION = process.env.JWT_EXPIRATION;
-  if (JWT_SECRET === undefined || JWT_SECRET.trim() === "") {
-    throw new Error("JWT_SECRET no definida");
+  if (JWT_SECRET === undefined || JWT_SECRET.trim() === '') {
+    throw new Error('JWT_SECRET no definida');
   }
-  if (JWT_EXPIRATION === undefined || JWT_EXPIRATION.trim() === "") {
-    throw new Error("JWT_EXPIRATION no definida");
+  if (JWT_EXPIRATION === undefined || JWT_EXPIRATION.trim() === '') {
+    throw new Error('JWT_EXPIRATION no definida');
   }
   try {
     const loginRequestBody: LoginRequestBody = toLoginRequestBody(
       req.body
     );
     const idDocente = await docenteServices.login(loginRequestBody);
-    const payload: Payload = { id: idDocente, role: "docente" };
+    const payload: Payload = { id: idDocente, role: 'docente' };
     const token = jwt.sign(payload, JWT_SECRET, {
       expiresIn: JWT_EXPIRATION,
     });
-    res.cookie("token", token, {
+    res.cookie('token', token, {
       httpOnly: true,
     });
-    res.json({ message: "Login exitoso" });
+    res.json({ message: 'Login exitoso' });
   } catch (error) {
     if (error instanceof Error) {
       res.status(401).json({ message: error.message });
     } else {
-      res.status(500).json({ message: "Error inesperado" });
+      res.status(500).json({ message: 'Error inesperado' });
     }
   }
 }
@@ -84,7 +84,7 @@ export async function getNotas(req, res) {
   );
   const hasAlumno = alumnos.some((alumno) => alumno.id == idAlumno);
   if (!hasAlumno) {
-    return res.status(403).json({ message: "No autorizado" });
+    return res.status(403).json({ message: 'No autorizado' });
   }
   const notas = await docenteServices.getNotas(
     req.docente.id,
@@ -105,7 +105,7 @@ export async function createNota(req, res) {
   );
   const hasAlumno = alumnos.some((alumno) => alumno.id == idAlumno);
   if (!hasAlumno) {
-    return res.status(403).json({ message: "No autorizado" });
+    return res.status(403).json({ message: 'No autorizado' });
   }
   const idNota = await docenteServices.createNota(
     idClase,

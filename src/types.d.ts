@@ -89,3 +89,12 @@ declare global {
     }
   }
 }
+
+export interface BloqueHorario {
+  dia: string;
+  hora_inicio: string;
+  hora_termino: string;
+  sala: string;
+  asignatura: string;
+  docente: string;
+}
