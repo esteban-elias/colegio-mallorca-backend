@@ -1,4 +1,4 @@
-# API RESTful para la intranet del Colegio Mallorca.
+# Backend API para la intranet del Colegio Mallorca.
 
 Este es un proyecto de tercer semestre de informática. "Colegio Mallorca" es una institución ficticia.
 
@@ -9,26 +9,51 @@ Este es un proyecto de tercer semestre de informática. "Colegio Mallorca" es un
 
 ## Endpoints
 
-### Alumno
+### Alumnos
 
-**POST**:
-- `/api/alumnos/login`: Loguear al alumno. Recibe los campos `rut` (sin puntos ni dígito verificador) y `contrasena`. Si las credenciales son válidas, responde un JSON con los campos `id, rut, dv, apellidos, nombres, correo, id_curso` del alumno y se firma una cookie que codifica el ID del alumno.
+1. `POST /alumno/login` 
+    - Inicio de sesión para los alumnos.
+    - Cuerpo de la solicitud: `{ "rut": "...", "contrasena": "..." }`
+  
+2. `GET /alumno/` 
+    - Obtiene los datos del alumno actualmente autenticado.
+  
+3. `GET /alumno/notas` 
+    - Obtiene las notas del alumno actualmente autenticado.
+  
+4. `GET /alumno/clases` 
+    - Obtiene las clases del alumno actualmente autenticado.
+  
+5. `GET /alumno/clase/:idClase/recursos` 
+    - Obtiene los recursos para la clase especificada.
+  
+6. `GET /alumno/horario` 
+    - Obtiene el horario del alumno actualmente autenticado.
+  
 
-**GET**: 
-- `/api/alumnos`: Obtener información del alumno. Responde los campos `id, rut, apellidos, nombres, correo, id_curso` del alumno.
-- `/api/alumnos/notas`: Obtener las notas del alumno. Responde la lista de todas las notas del alumno. Cada elemento contiene los campos `asignatura, numero, porcentaje, calificacion`.
-- `/api/alumnos/clases`: Obtener las clases del alumno. Responde la lista de todas las clases del alumno. Cada elemento contiene los campos `id, asignatura`.
-- `/api/alumnos/clases/:idClase/recursos`: Obtener los recursos pedagógicos de una clase. Responde la lista de todos los recursos pedagógicos de una clase. Cada elemento contiene los campos `titulo, ubicacion`.
+### Docentes
 
-### Docente
-
-**POST**:
-- `/api/docentes/login`: Loguear al docente. Recibe los campos `rut` (sin puntos ni dígito verificador) y `contrasena`. Si las credenciales son válidas, responde un JSON con los campos `id, rut, dv, apellidos, nombres, correo` del docente y se firma una cookie que codifica el ID del docente.
-- `api/docentes/clases/:idClase/alumnos/:idAlumno/notas`: Registrar una nota a un alumno. Recibe el campo `nota`, cuyo valor es un JSON que contiene los campos `numero`, `porcentaje` y `calificacion`. Responde la ID de la nota creada.
-
-**GET**:
-- `/api/docentes`: Obtener información del docente. Retorna los campos `id, rut, dv, apellidos, nombres, correo` del docente.
-- `/api/docentes/clases`: Obtener las clases del docente. Responde la lista de todas las clases del docente. Cada elemento contiene los campos `id, curso, asignatura`.
-- `/api/docentes/clases/:idClase/recursos`: Obtener los recursos pedagógicos de una clase. Responde la lista de todos los recursos pedagógicos de una clase. Cada elemento contiene los campos `titulo, ubicacion`.
-- `/api/docentes/clases/:idClase/alumnos`: Obtener los alumnos de una clase. Responde la lista de todos los alumnos de una clase. Cada elemento contiene los campos `id, apellidos, nombres, rut`.
-- `/api/docentes/clases/:idClase/alumnos/:idAlumno/notas`: Obtener las notas de un alumno. Responde la lista de todos las notas del alumno de una clase. Cada elemento contiene los campos `numero, porcentaje, calificacion`.
+1. `POST /docente/login` 
+    - Inicio de sesión para los docentes.
+    - Cuerpo de la solicitud: `{ "rut": "...", "contrasena": "..." }`
+2. `GET /docente/` 
+    - Obtiene los datos del docente actualmente autenticado.
+  
+3. `GET /docente/clases` 
+    - Obtiene las clases del docente actualmente autenticado.
+  
+4. `GET /docente/clase/:idClase/recursos` 
+    - Obtiene los recursos para la clase especificada.
+  
+5. `GET /docente/clase/:idClase/alumnos` 
+    - Obtiene los alumnos para la clase especificada.
+  
+6. `GET /docente/clase/:idClase/alumno/:idAlumno/notas` 
+    - Obtiene las notas del alumno especificado en la clase especificada.
+  
+7. `POST /docente/clase/:idClase/alumno/:idAlumno/notas` 
+    - Crea una nota para el alumno especificado en la clase especificada.
+    - Cuerpo de la solicitud: `{ "numero": 1, "porcentaje": 20, "calificacion": 6.5 }`
+  
+8. `GET /docente/horario` 
+    - Obtiene el horario del docente actualmente autenticado.
