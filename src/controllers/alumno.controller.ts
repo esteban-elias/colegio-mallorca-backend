@@ -3,16 +3,9 @@ import jwt from 'jsonwebtoken';
 import * as alumnoServices from '../services/alumno.service';
 import { toLoginRequestBody } from './utils/validations';
 import { LoginRequestBody, Payload } from '../types';
+import { JWT_EXPIRATION, JWT_SECRET } from '../config/env';
 
 export async function login(req: Request, res: Response) {
-  const JWT_SECRET = process.env.JWT_SECRET;
-  const JWT_EXPIRATION = process.env.JWT_EXPIRATION;
-  if (JWT_SECRET === undefined || JWT_SECRET.trim() === '') {
-    throw new Error('Error en el login');
-  }
-  if (JWT_EXPIRATION === undefined || JWT_EXPIRATION.trim() === '') {
-    throw new Error('Error en el login');
-  }
   try {
     const loginRequestBody: LoginRequestBody = toLoginRequestBody(
       req.body

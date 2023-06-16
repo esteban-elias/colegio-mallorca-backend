@@ -21,7 +21,7 @@ alumnoRouter.get('/clases', verifyToken, (req, res, next) => {
 });
 
 alumnoRouter.get(
-  '/clases/:idClase/recursos',
+  '/clase/:idClase/recursos',
   verifyToken,
   (req, res, next) => {
     alumnoControllers.getRecursos(req, res).catch(next);

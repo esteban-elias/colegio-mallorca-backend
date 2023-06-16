@@ -1,37 +1,55 @@
 import { Router } from 'express';
-import * as docenteControllers from '../controllers/docente.controller'; // * as ???
+import * as docenteControllers from '../controllers/docente.controller';
 import { verifyToken } from '../middlewares/auth';
 
 const docenteRouter = Router();
 
-docenteRouter.post('/login', docenteControllers.login);
+docenteRouter.post('/login', (req, res, next) => {
+  docenteControllers.login(req, res).catch(next);
+});
 
-docenteRouter.get('/', verifyToken, docenteControllers.getDocente);
+docenteRouter.get('/', verifyToken, (req, res, next) => {
+  docenteControllers.getDocente(req, res).catch(next);
+});
+
+docenteRouter.get('/clases', verifyToken, (req, res, next) => {
+  docenteControllers.getClases(req, res).catch(next);
+});
+
 docenteRouter.get(
-  '/clases',
+  '/clase/:idClase/recursos',
   verifyToken,
-  docenteControllers.getClases
+  (req, res, next) => {
+    docenteControllers.getRecursos(req, res).catch(next);
+  }
 );
+
 docenteRouter.get(
-  '/clases/:idClase/recursos',
+  '/clase/:idClase/alumnos',
   verifyToken,
-  docenteControllers.getRecursos
+  (req, res, next) => {
+    docenteControllers.getAlumnos(req, res).catch(next);
+  }
 );
+
 docenteRouter.get(
-  '/clases/:idClase/alumnos',
+  '/clase/:idClase/alumno/:idAlumno/notas',
   verifyToken,
-  docenteControllers.getAlumnos
-);
-docenteRouter.get(
-  '/clases/:idClase/alumnos/:idAlumno/notas',
-  verifyToken,
-  docenteControllers.getNotas
+  (req, res, next) => {
+    docenteControllers.getNotasOfAlumno(req, res).catch(next);
+  }
 );
 
 docenteRouter.post(
-  '/clases/:idClase/alumnos/:idAlumno/notas',
+  '/clase/:idClase/alumno/:idAlumno/notas',
   verifyToken,
-  docenteControllers.createNota
+  (req, res, next) => {
+    docenteControllers.createNota(req, res).catch(next);
+  }
 );
+
+docenteRouter.get('/horario', verifyToken, (req, res, next) => {
+  docenteControllers.getHorario(req, res).catch(next);
+});
 
 export default docenteRouter;

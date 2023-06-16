@@ -5,16 +5,13 @@ import {
 } from 'express-serve-static-core';
 import jwt from 'jsonwebtoken';
 import { DecodedToken } from '../types';
+import { JWT_SECRET } from '../config/env';
 
 export function verifyToken(
   req: Request,
   res: Response,
   next: NextFunction
 ): void {
-  const JWT_SECRET = process.env.JWT_SECRET;
-  if (JWT_SECRET === undefined || JWT_SECRET.trim() === '') {
-    throw new Error('JWT_SECRET no definida');
-  }
   const token = req.cookies.token;
   if (token === undefined) {
     return void res.status(401).json({ message: 'No autorizado' });
@@ -35,8 +32,3 @@ export function verifyToken(
     res.status(401).json({ message: 'No autorizado' });
   }
 }
-
-// TODO:
-// - Deberia importar `express-serve-static-core` en todos los modulos?
-// - Deberia reemplazar todos mis `throw new Error` por un
-//   `return res.status...`?

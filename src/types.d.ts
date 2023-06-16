@@ -49,10 +49,8 @@ export interface NotaForCreation {
   numero: number;
   porcentaje: number;
   calificacion: number;
-  ano: number;
-  semestre: number;
-  id_alumno: number;
-  id_asignatura: number;
+  idAlumno: number;
+  idAsignatura: number;
 }
 
 export interface ClaseForAlumno {
@@ -90,11 +88,20 @@ declare global {
   }
 }
 
-export interface BloqueHorario {
+export interface BloqueHorarioForAlumno {
   dia: string;
   hora_inicio: string;
   hora_termino: string;
   sala: string;
   asignatura: string;
   docente: string;
+}
+
+export interface BloqueHorarioForDocente {
+  dia: string;
+  hora_inicio: string;
+  hora_termino: string;
+  sala: string;
+  asignatura: string;
+  curso: string;
 }

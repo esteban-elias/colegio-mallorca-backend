@@ -1,18 +1,18 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import * as docenteServices from '../services/docente.service.js';
-import { toLoginRequestBody } from './utils/validations.js';
-import { LoginRequestBody, Payload } from '../types.js';
+import * as docenteServices from '../services/docente.service';
+import {
+  toLoginRequestBody,
+  toNotaForCreation,
+} from './utils/validations';
+import {
+  LoginRequestBody,
+  NotaForCreation,
+  Payload,
+} from '../types';
+import { JWT_EXPIRATION, JWT_SECRET } from '../config/env';
 
 export async function login(req: Request, res: Response) {
-  const JWT_SECRET = process.env.JWT_SECRET;
-  const JWT_EXPIRATION = process.env.JWT_EXPIRATION;
-  if (JWT_SECRET === undefined || JWT_SECRET.trim() === '') {
-    throw new Error('JWT_SECRET no definida');
-  }
-  if (JWT_EXPIRATION === undefined || JWT_EXPIRATION.trim() === '') {
-    throw new Error('JWT_EXPIRATION no definida');
-  }
   try {
     const loginRequestBody: LoginRequestBody = toLoginRequestBody(
       req.body
@@ -35,82 +35,133 @@ export async function login(req: Request, res: Response) {
   }
 }
 
-export function getDocente(req, res) {
-  res.json(req.docente);
-}
-
-export async function getClases(req, res) {// const { rut, contrasena } = req.body;
-  // try {
-  //   const docente = await docenteServices.login(rut, contrasena);
-  //   const token = jwt.sign({ id: docente.id, role: 'docente' }, 
-  //                           process.env.JWT_SECRET, {expiresIn: '1h'}) // 30m???
-  //   res.cookie("token", token, {
-  //       httpOnly: true
-  //   })
-  //   res.json(docente);
-  // } catch (error) {
-  //     res.status(401).json({message: error.message});
-  // }
-
-  const clases = await docenteServices.getClases(req.docente.id);
-  res.json(clases);
-}
-
-export async function getRecursos(req, res) {
-  const { idClase } = req.params;
-  const recursos = await docenteServices.getRecursos(
-    req.docente.id,
-    idClase
-  );
-  res.json(recursos);
-}
-
-export async function getAlumnos(req, res) {
-  const { idClase } = req.params;
-  const alumnos = await docenteServices.getAlumnos(
-    req.docente.id,
-    idClase
-  );
-  res.json(alumnos);
-}
-
-export async function getNotas(req, res) {
-  const { idClase } = req.params;
-  const { idAlumno } = req.params;
-  // Verificar que el alumno pertenezca a la clase del docente
-  const alumnos = await docenteServices.getAlumnos(
-    req.docente.id,
-    idClase
-  );
-  const hasAlumno = alumnos.some((alumno) => alumno.id == idAlumno);
-  if (!hasAlumno) {
-    return res.status(403).json({ message: 'No autorizado' });
+export async function getDocente(req: Request, res: Response) {
+  try {
+    if (req.docente === undefined) {
+      throw new Error('No autorizado');
+    }
+    const docente = await docenteServices.getDocenteById(req.docente.id);
+    res.json(docente);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(401).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Error inesperado' });
+    }
   }
-  const notas = await docenteServices.getNotas(
-    req.docente.id,
-    idClase,
-    idAlumno
-  );
-  res.json(notas);
 }
 
-export async function createNota(req, res) {
-  const { idClase } = req.params;
-  const { idAlumno } = req.params;
-  const { nota } = req.body;
-  // Verificar que el alumno pertenezca a la clase del docente
-  const alumnos = await docenteServices.getAlumnos(
-    req.docente.id,
-    idClase
-  );
-  const hasAlumno = alumnos.some((alumno) => alumno.id == idAlumno);
-  if (!hasAlumno) {
-    return res.status(403).json({ message: 'No autorizado' });
+export async function getClases(req: Request, res: Response) {
+  try {
+    if (req.docente === undefined) {
+      throw new Error('No autorizado');
+    }
+    const clases = await docenteServices.getClasesByDocenteId(
+      req.docente.id
+    );
+    res.json(clases);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(401).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Error inesperado' });
+    }
   }
-  const idNota = await docenteServices.createNota(
-    idClase,
-    idAlumno,
-    nota
-  );
-  res.json({ id: idNota });
+}
+
+export async function getRecursos(req: Request, res: Response) {
+  try {
+    if (req.docente === undefined) {
+      throw new Error('No autorizado');
+    }
+    const idClase = parseInt(req.params.idClase);
+    const recursos = await docenteServices.getRecursosByClaseId(
+      idClase
+    );
+    res.json(recursos);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(401).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Error inesperado' });
+    }
+  }
+}
+
+export async function getAlumnos(req: Request, res: Response) {
+  try {
+    if (req.docente === undefined) {
+      throw new Error('No autorizado');
+    }
+    const idClase = parseInt(req.params.idClase);
+    const alumnos = await docenteServices.getAlumnosByClaseId(idClase);
+    res.json(alumnos);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(401).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Error inesperado' });
+    }
+  }
+}
+
+export async function getNotasOfAlumno(req: Request, res: Response) {
+  try {
+    if (req.docente === undefined) {
+      throw new Error('No autorizado');
+    }
+    const idAlumno = parseInt(req.params.idAlumno);
+    const idClase = parseInt(req.params.idClase);
+    const notas = await docenteServices.getNotasByAlumnoIdAndClaseId(idAlumno, idClase);
+    res.json(notas);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(401).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Error inesperado' });
+    }
+  }
+}
+
+export async function createNota(req: Request, res: Response) {
+  try {
+    if (req.docente === undefined) {
+      throw new Error('No autorizado');
+    }
+    const idAlumno = parseInt(req.params.idAlumno);
+    const idClase = parseInt(req.params.idClase);
+    const idAsignatura =
+      await docenteServices.getAsignaturaIdByClaseId(idClase);
+    const nota: NotaForCreation = toNotaForCreation({
+      ...req.body,
+      idAlumno,
+      idAsignatura,
+    });
+    const idNota = await docenteServices.createNota(nota);
+    res.json({ message: 'Nota creada exitosamente. ID:', idNota });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(401).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Error inesperado' });
+    }
+  }
+}
+
+export async function getHorario(req: Request, res: Response) {
+  try {
+    if (req.docente === undefined) {
+      throw new Error('No autorizado');
+    }
+    const horario = await docenteServices.getHorarioByDocenteId(
+      req.docente.id
+    );
+    res.json(horario);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(401).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: 'Error inesperado' });
+    }
+  }
 }

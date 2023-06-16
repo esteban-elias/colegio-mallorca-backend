@@ -1,16 +1,5 @@
 import { createPool } from 'mysql2/promise';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const DATABASE_URL = process.env.DATABASE_URL;
-
-if (
-  DATABASE_URL === undefined ||
-  DATABASE_URL.trim() === ''
-) {
-  throw new Error('Database URL no definida');
-}
+import { DATABASE_URL } from './env';
 
 const pool = createPool(DATABASE_URL);
 

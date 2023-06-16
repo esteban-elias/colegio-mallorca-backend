@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import db from './config/db';
 import indexRouter from './routes/index.route';
+import { PORT } from './config/env';
 
 const app = express();
 
@@ -10,11 +11,6 @@ app.use(express.json());
 app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-
-const PORT: string =
-  process.env.PORT !== undefined && process.env.PORT.trim() !== ''
-    ? process.env.PORT
-    : '3000';
 
 app.set('port', PORT);
 
