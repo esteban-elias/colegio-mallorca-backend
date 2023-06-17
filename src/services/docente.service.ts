@@ -231,6 +231,15 @@ export async function getHorarioByDocenteId(id: number) {
     inner join bloque on clase_bloque_sala.id_bloque=bloque.id
     inner join sala on clase_bloque_sala.id_sala=sala.id
     where docente.id = ? and clase.ano = ?
+    ORDER BY 
+    CASE 
+        WHEN bloque.dia = 'lunes' THEN 1
+        WHEN bloque.dia = 'martes' THEN 2
+        WHEN bloque.dia = 'miercoles' THEN 3
+        WHEN bloque.dia = 'jueves' THEN 4
+        WHEN bloque.dia = 'viernes' THEN 5
+    END, 
+    bloque.hora_inicio
     `,
     [id, YEAR]
   )) as Array<RowDataPacket>;
