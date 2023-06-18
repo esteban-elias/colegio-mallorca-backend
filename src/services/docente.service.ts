@@ -1,18 +1,19 @@
 import bcrypt from 'bcrypt';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import db from '../config/db';
+import { SEMESTER, YEAR } from '../config/env';
+import { LoginError, NotFoundError } from '../errors/custom-errors';
 import {
   AlumnoForDocente,
+  BloqueHorarioForDocente,
   ClaseForDocente,
   DocenteForLogin,
   DocenteForSelf,
+  LoginRequestBody,
   Nota,
   NotaForCreation,
   Recurso,
-  LoginRequestBody,
-  BloqueHorarioForDocente,
 } from '../types';
-import { SEMESTER, YEAR } from '../config/env';
 
 export async function login(loginRequestBody: LoginRequestBody) {
   const [result]: Array<RowDataPacket> = (await db.query(
@@ -25,14 +26,14 @@ export async function login(loginRequestBody: LoginRequestBody) {
   )) as Array<RowDataPacket>;
   const docente: DocenteForLogin | undefined = result[0];
   if (docente === undefined) {
-    throw new Error('Credenciales inválidas');
+    throw new LoginError('Docente no encontrado');
   }
   const isValidPassword = await bcrypt.compare(
     loginRequestBody.contrasena,
     docente.contrasena.toString('utf8')
   );
   if (!isValidPassword) {
-    throw new Error('Credenciales inválidas');
+    throw new LoginError('Contraseña incorrecta');
   }
   return docente.id;
 }
@@ -49,7 +50,7 @@ export async function getDocenteById(id: number) {
   )) as Array<RowDataPacket>;
   const docente: DocenteForSelf | undefined = result[0];
   if (docente === undefined) {
-    throw new Error('Docente no encontrado');
+    throw new NotFoundError('Docente no encontrado');
   }
   return docente;
 }
@@ -68,7 +69,7 @@ export async function getClasesByDocenteId(id: number) {
     [id, YEAR]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new Error('Docente no encontrado o sin clases registradas');
+    throw new NotFoundError('Docente no encontrado o sin clases registradas');
   }
   const clases: Array<ClaseForDocente> = result.map(
     (clase: RowDataPacket) => {
@@ -101,7 +102,7 @@ export async function getRecursosByClaseId(id: number) {
     [id, YEAR, id, YEAR]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new Error('Clase no encontrada o sin recursos registrados');
+    throw new NotFoundError('Clase no encontrada o sin recursos registrados');
   }
   const recursos: Array<Recurso> = result.map(
     (recurso: RowDataPacket) => {
@@ -128,7 +129,7 @@ export async function getAlumnosByClaseId(id: number) {
     [id, YEAR]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new Error('Clase no encontrada o sin alumnos registrados');
+    throw new NotFoundError('Clase no encontrada o sin alumnos registrados');
   }
   const alumnos: Array<AlumnoForDocente> = result.map(
     (alumno: RowDataPacket) => {
@@ -160,7 +161,7 @@ export async function getNotasByAlumnoIdAndClaseId(
     [idAlumno, idClase, YEAR, SEMESTER]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new Error('Alumno no encontrado o sin notas registradas');
+    throw new NotFoundError('Alumno no encontrado o sin notas registradas');
   }
   const notas: Array<Nota> = result.map((nota: RowDataPacket) => {
     return {
@@ -208,7 +209,7 @@ export async function getAsignaturaIdByClaseId(id: number) {
     [id]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new Error('Clase no encontrada');
+    throw new NotFoundError('Clase no encontrada');
   }
   const idAsignatura: number | undefined = result[0].id;
   if (idAsignatura === undefined) {
@@ -244,7 +245,7 @@ export async function getHorarioByDocenteId(id: number) {
     [id, YEAR]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new Error('Docente no encontrado o sin clases');
+    throw new NotFoundError('Docente no encontrado o sin clases');
   }
   const horario: Array<BloqueHorarioForDocente> = result.map(
     (clase: RowDataPacket) => {

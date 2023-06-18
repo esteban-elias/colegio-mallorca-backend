@@ -4,7 +4,7 @@ dotenv.config();
 function getEnvVariable(key: string) {
   const value = process.env[key];
   if (value === undefined || value.trim() === '') {
-    throw new Error('Error de configuración del servidor');
+    throw new Error('Error de al cargar las variables de entorno');
   }
   return value;
 }

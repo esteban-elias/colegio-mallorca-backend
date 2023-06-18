@@ -1,9 +1,10 @@
-import express, { ErrorRequestHandler } from 'express';
-import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import express from 'express';
 import db from './config/db';
-import indexRouter from './routes/index.route';
 import { PORT } from './config/env';
+import errorHandler from './errors/error-handler';
+import indexRouter from './routes/index.route';
 
 const app = express();
 
@@ -15,11 +16,6 @@ app.use(express.urlencoded({ extended: true }));
 app.set('port', PORT);
 
 app.use('/', indexRouter);
-
-const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Error inesperado' });
-};
 
 app.use(errorHandler);
 

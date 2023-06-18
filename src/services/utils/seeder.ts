@@ -52,8 +52,10 @@
 /**
  * Cambiar la última coma por un semicolon.
  */
-function generateInsertStatementsClase (): void {
-  console.log('INSERT INTO clase (id_curso, id_asignatura, id_docente, ano) VALUES');
+function generateInsertStatementsClase(): void {
+  console.log(
+    'INSERT INTO clase (id_curso, id_asignatura, id_docente, ano) VALUES'
+  );
   for (let curso = 1; curso <= 6; curso++) {
     console.log(`
     (${curso}, 1, 1, 2023),
@@ -174,7 +176,6 @@ generateInsertStatementsClase();
 // INSERT INTO recurso_clase (id_recurso, id_clase) VALUES
 // ()
 
-
 // INSERT INTO sala (codigo, capacidad) VALUES
 // ('101', 20),
 // ('102', 20),
@@ -183,23 +184,23 @@ generateInsertStatementsClase();
 // ('105', 20),
 // ('106', 20);
 
-INSERT INTO bloque (dia, hora_inicio, hora_termino) VALUES
-('lunes', '07:45:00', '08:30:00'),
-('lunes', '08:30:00', '09:15:00'),
-('lunes', '09:25:00', '10:10:00'),
-('lunes', '10:10:00', '10:55:00'),
-('lunes', '11:00:00', '11:45:00'),
-('lunes', '11:45:00', '12:30:00'),
-('lunes', '12:35:00', '13:20:00'),
-('lunes', '13:20:00', '14:05:00'),
-('martes', '07:45:00', '08:30:00'),
-('martes', '08:30:00', '09:15:00'),
-('martes', '09:25:00', '10:10:00'),
-('martes', '10:10:00', '10:55:00'),
-('martes', '11:00:00', '11:45:00'),
-('martes', '11:45:00', '12:30:00'),
-('martes', '12:35:00', '13:20:00'),
-('martes', '13:20:00', '14:05:00');
+// INSERT INTO bloque (dia, hora_inicio, hora_termino) VALUES
+// ('lunes', '07:45:00', '08:30:00'),
+// ('lunes', '08:30:00', '09:15:00'),
+// ('lunes', '09:25:00', '10:10:00'),
+// ('lunes', '10:10:00', '10:55:00'),
+// ('lunes', '11:00:00', '11:45:00'),
+// ('lunes', '11:45:00', '12:30:00'),
+// ('lunes', '12:35:00', '13:20:00'),
+// ('lunes', '13:20:00', '14:05:00'),
+// ('martes', '07:45:00', '08:30:00'),
+// ('martes', '08:30:00', '09:15:00'),
+// ('martes', '09:25:00', '10:10:00'),
+// ('martes', '10:10:00', '10:55:00'),
+// ('martes', '11:00:00', '11:45:00'),
+// ('martes', '11:45:00', '12:30:00'),
+// ('martes', '12:35:00', '13:20:00'),
+// ('martes', '13:20:00', '14:05:00');
 
 // INSERT INTO clase_bloque_sala (id_bloque, id_sala, id_clase) VALUES
 // (1, 1, 1),
@@ -303,6 +304,5 @@ INSERT INTO bloque (dia, hora_inicio, hora_termino) VALUES
 // (14, 6, 47),
 // (15, 6, 48),
 // (16, 6, 48);
-
 
 // */
