@@ -17,6 +17,10 @@ app.set('port', PORT);
 
 app.use('/', indexRouter);
 
+app.use('*', (_req, res) => {
+  res.status(404).json({ message: 'Endpoint no encontrado' });
+});
+
 app.use(errorHandler);
 
 app.listen(app.get('port'), () => {
