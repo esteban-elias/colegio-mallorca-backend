@@ -16,7 +16,7 @@ export interface AlumnoForLogin {
 export type AlumnoForDocente = Omit<
   AlumnoForSelf,
   'rut' | 'dv' | 'telefono'
->;
+> & { id: number };
 
 export interface DocenteForSelf {
   rut: string;

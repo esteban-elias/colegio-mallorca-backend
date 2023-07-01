@@ -40,7 +40,7 @@ export async function getAlumnoById(id: number) {
   const [result] = (await db.query(
     `
     SELECT rut, dv, apellidos, nombres, correo, telefono, 
-    foto_ubicacion 
+    foto_ubicacion, fecha_nacimiento, direccion
     FROM alumno
     WHERE id = ?
     `,

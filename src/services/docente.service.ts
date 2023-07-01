@@ -42,7 +42,7 @@ export async function getDocenteById(id: number) {
   const [result]: Array<RowDataPacket> = (await db.query(
     `
     SELECT rut, dv, apellidos, nombres,
-    correo, telefono, foto_ubicacion 
+    correo, telefono, foto_ubicacion, fecha_nacimiento, direccion
     FROM docente 
     WHERE id = ?
     `,
@@ -118,7 +118,7 @@ export async function getRecursosByClaseId(id: number) {
 export async function getAlumnosByClaseId(id: number) {
   const [result] = (await db.query(
     `
-    select alumno.apellidos, alumno.nombres, alumno.correo,
+    select alumno.id, alumno.apellidos, alumno.nombres, alumno.correo,
     alumno.foto_ubicacion
     from clase
     inner join curso on clase.id_curso=curso.id
@@ -134,6 +134,7 @@ export async function getAlumnosByClaseId(id: number) {
   const alumnos: Array<AlumnoForDocente> = result.map(
     (alumno: RowDataPacket) => {
       return {
+        id: alumno.id,
         apellidos: alumno.apellidos,
         nombres: alumno.nombres,
         correo: alumno.correo,
