@@ -86,13 +86,13 @@ export async function getClasesByDocenteId(id: number) {
 export async function getRecursosByClaseId(id: number) {
   const [result]: Array<RowDataPacket> = (await db.query(
     `
-    select recurso.titulo, recurso.ubicacion
+    select recurso.id, recurso.titulo, recurso.ubicacion
     from clase
     inner join recurso_clase on clase.id=recurso_clase.id_clase
     inner join recurso on recurso_clase.id_recurso=recurso.id
     where clase.id = ? and clase.ano = ?
     union
-    select recurso.titulo, recurso.ubicacion
+    select recurso.id, recurso.titulo, recurso.ubicacion
     from clase
     inner join asignatura on clase.id_asignatura=asignatura.id
     inner join recurso_asignatura on asignatura.id=recurso_asignatura.id_asignatura
@@ -107,6 +107,7 @@ export async function getRecursosByClaseId(id: number) {
   const recursos: Array<Recurso> = result.map(
     (recurso: RowDataPacket) => {
       return {
+        id: recurso.id,
         titulo: recurso.titulo,
         ubicacion: recurso.ubicacion,
       };

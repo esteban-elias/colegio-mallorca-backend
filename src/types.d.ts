@@ -63,6 +63,7 @@ export interface ClaseForDocente extends ClaseForAlumno {
 }
 
 export interface Recurso {
+  id: number;
   titulo: string;
   ubicacion: string;
 }
