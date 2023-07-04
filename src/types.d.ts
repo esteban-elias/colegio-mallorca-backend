@@ -39,6 +39,7 @@ export interface LoginRequestBody {
 }
 
 export interface Nota {
+  id: number;
   asignatura: string;
   numero: number;
   porcentaje: number;

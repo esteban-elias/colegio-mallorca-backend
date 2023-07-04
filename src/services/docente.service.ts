@@ -152,7 +152,7 @@ export async function getNotasByAlumnoIdAndClaseId(
 ) {
   const [result] = (await db.query(
     `
-    select asignatura.nombre, nota.numero, nota.porcentaje,
+    select nota.id, asignatura.nombre, nota.numero, nota.porcentaje,
     nota.calificacion
     from alumno 
     inner join nota on alumno.id=nota.id_alumno
@@ -167,6 +167,7 @@ export async function getNotasByAlumnoIdAndClaseId(
   }
   const notas: Array<Nota> = result.map((nota: RowDataPacket) => {
     return {
+      id: nota.id,
       asignatura: nota.nombre,
       numero: nota.numero,
       porcentaje: nota.porcentaje,
