@@ -210,7 +210,10 @@ export async function createNota(nota: NotaForCreation) {
   return id;
 }
 
-export async function updateNota(idNota: number, nota: NotaForUpdate) {
+export async function updateNotaById(
+  idNota: number,
+  nota: NotaForUpdate
+) {
   console.log(nota);
   const [result] = (await db.query(
     `
@@ -222,6 +225,19 @@ export async function updateNota(idNota: number, nota: NotaForUpdate) {
     where id = ?
     `,
     [nota.numero, nota.porcentaje, nota.calificacion, idNota]
+  )) as Array<ResultSetHeader>;
+  if (result.affectedRows === 0) {
+    throw new NotFoundError('Nota no encontrada');
+  }
+}
+
+export async function deleteNotaById(idNota: number) {
+  const [result] = (await db.query(
+    `
+    delete from nota
+    where id = ?
+    `,
+    [idNota]
   )) as Array<ResultSetHeader>;
   if (result.affectedRows === 0) {
     throw new NotFoundError('Nota no encontrada');

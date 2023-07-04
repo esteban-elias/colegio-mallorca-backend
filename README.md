@@ -57,3 +57,13 @@ Este es un proyecto de tercer semestre de informática. "Colegio Mallorca" es un
   
 8. `GET /docente/horario` 
     - Obtiene el horario del docente actualmente autenticado.
+
+9. `PATCH /clase/:idClase/alumno/:idAlumno/nota/:idNota`
+    - Actualiza la nota especificada del alumno especificado
+      en la clase especificada.
+
+10. `DELETE /clase/:idClase/alumno/:idAlumno/nota/:idNota`
+    - Actualiza la nota especificada del alumno especificado
+      en la clase especificada.
+
+   

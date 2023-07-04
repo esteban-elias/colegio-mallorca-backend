@@ -60,4 +60,12 @@ docenteRouter.patch(
   }
 );
 
+docenteRouter.delete(
+  '/clase/:idClase/alumno/:idAlumno/nota/:idNota',
+  verifyToken,
+  (req, res, next) => {
+    docenteControllers.deleteNota(req, res).catch(next);
+  }
+);
+
 export default docenteRouter;

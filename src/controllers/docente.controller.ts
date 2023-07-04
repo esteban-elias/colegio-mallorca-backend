@@ -105,6 +105,13 @@ export async function updateNota(req: Request, res: Response) {
   assertReqDocente(req);
   const idNota = parseInt(req.params.idNota);
   const nota: NotaForUpdate = toNotaForUpdate(req.body);
-  await docenteServices.updateNota(idNota, nota);
+  await docenteServices.updateNotaById(idNota, nota);
   res.json({ message: 'Nota actualizada exitosamente' });
+}
+
+export async function deleteNota(req: Request, res: Response) {
+  assertReqDocente(req);
+  const idNota = parseInt(req.params.idNota);
+  await docenteServices.deleteNotaById(idNota);
+  res.json({ message: 'Nota eliminada exitosamente' });
 }
