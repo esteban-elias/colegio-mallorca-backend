@@ -6,11 +6,13 @@ import {
   DecodedToken,
   LoginRequestBody,
   NotaForCreation,
+  NotaForUpdate,
   Payload,
 } from '../types';
 import {
   toLoginRequestBody,
   toNotaForCreation,
+  toNotaForUpdate,
 } from './utils/validations';
 
 function assertReqDocente(
@@ -97,4 +99,12 @@ export async function getHorario(req: Request, res: Response) {
     req.docente.id
   );
   res.json(horario);
+}
+
+export async function updateNota(req: Request, res: Response) {
+  assertReqDocente(req);
+  const idNota = parseInt(req.params.idNota);
+  const nota: NotaForUpdate = toNotaForUpdate(req.body);
+  await docenteServices.updateNota(idNota, nota);
+  res.json({ message: 'Nota actualizada exitosamente' });
 }

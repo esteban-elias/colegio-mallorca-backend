@@ -107,3 +107,9 @@ export interface BloqueHorarioForDocente {
   asignatura: string;
   curso: string;
 }
+
+export interface NotaForUpdate {
+  numero?: number;
+  porcentaje?: number;
+  calificacion?: number;
+}

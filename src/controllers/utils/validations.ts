@@ -1,5 +1,5 @@
 import { ValidationError } from '../../errors/custom-errors';
-import { LoginRequestBody, NotaForCreation } from '../../types';
+import { LoginRequestBody, NotaForCreation, NotaForUpdate } from '../../types';
 
 export function isString(value: any): boolean {
   return typeof value === 'string' || value instanceof String;
@@ -41,5 +41,35 @@ export function toNotaForCreation(object: any): NotaForCreation {
     calificacion: object.calificacion,
     idAlumno: object.idAlumno,
     idAsignatura: object.idAsignatura,
+  };
+}
+
+export function toNotaForUpdate(object: any): NotaForUpdate {
+  if (
+    (typeof object.numero !== 'undefined' &&
+      typeof object.numero !== 'number') ||
+    (typeof object.porcentaje !== 'undefined' &&
+      typeof object.porcentaje !== 'number') ||
+    (typeof object.calificacion !== 'undefined' &&
+      typeof object.calificacion !== 'number')
+  ) {
+    throw new ValidationError('Los campos deben ser números');
+  }
+  if (
+    typeof object.porcentaje !== 'undefined' &&
+    (object.porcentaje < 1 || object.porcentaje > 100)
+  ) {
+    throw new ValidationError('Porcentaje fuera de rango');
+  }
+  if (
+    typeof object.calificacion !== 'undefined' &&
+    (object.calificacion < 1 || object.calificacion > 7)
+  ) {
+    throw new ValidationError('Nota fuera de rango');
+  }
+  return {
+    numero: object.numero,
+    porcentaje: object.porcentaje,
+    calificacion: object.calificacion,
   };
 }

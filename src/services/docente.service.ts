@@ -12,6 +12,7 @@ import {
   LoginRequestBody,
   Nota,
   NotaForCreation,
+  NotaForUpdate,
   Recurso,
 } from '../types';
 
@@ -69,7 +70,9 @@ export async function getClasesByDocenteId(id: number) {
     [id, YEAR]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new NotFoundError('Docente no encontrado o sin clases registradas');
+    throw new NotFoundError(
+      'Docente no encontrado o sin clases registradas'
+    );
   }
   const clases: Array<ClaseForDocente> = result.map(
     (clase: RowDataPacket) => {
@@ -102,7 +105,9 @@ export async function getRecursosByClaseId(id: number) {
     [id, YEAR, id, YEAR]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new NotFoundError('Clase no encontrada o sin recursos registrados');
+    throw new NotFoundError(
+      'Clase no encontrada o sin recursos registrados'
+    );
   }
   const recursos: Array<Recurso> = result.map(
     (recurso: RowDataPacket) => {
@@ -130,7 +135,9 @@ export async function getAlumnosByClaseId(id: number) {
     [id, YEAR]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new NotFoundError('Clase no encontrada o sin alumnos registrados');
+    throw new NotFoundError(
+      'Clase no encontrada o sin alumnos registrados'
+    );
   }
   const alumnos: Array<AlumnoForDocente> = result.map(
     (alumno: RowDataPacket) => {
@@ -163,7 +170,9 @@ export async function getNotasByAlumnoIdAndClaseId(
     [idAlumno, idClase, YEAR, SEMESTER]
   )) as Array<RowDataPacket>;
   if (result.length === 0) {
-    throw new NotFoundError('Alumno no encontrado o sin notas registradas');
+    throw new NotFoundError(
+      'Alumno no encontrado o sin notas registradas'
+    );
   }
   const notas: Array<Nota> = result.map((nota: RowDataPacket) => {
     return {
@@ -199,6 +208,24 @@ export async function createNota(nota: NotaForCreation) {
     throw new Error('Error al crear nota');
   }
   return id;
+}
+
+export async function updateNota(idNota: number, nota: NotaForUpdate) {
+  console.log(nota);
+  const [result] = (await db.query(
+    `
+    update nota
+    set
+    numero = coalesce(?, numero),
+    porcentaje = coalesce(?, porcentaje),
+    calificacion = coalesce(?, calificacion)
+    where id = ?
+    `,
+    [nota.numero, nota.porcentaje, nota.calificacion, idNota]
+  )) as Array<ResultSetHeader>;
+  if (result.affectedRows === 0) {
+    throw new NotFoundError('Nota no encontrada');
+  }
 }
 
 export async function getAsignaturaIdByClaseId(id: number) {

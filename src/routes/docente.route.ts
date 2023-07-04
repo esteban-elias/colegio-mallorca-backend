@@ -52,4 +52,12 @@ docenteRouter.get('/horario', verifyToken, (req, res, next) => {
   docenteControllers.getHorario(req, res).catch(next);
 });
 
+docenteRouter.patch(
+  '/clase/:idClase/alumno/:idAlumno/nota/:idNota',
+  verifyToken,
+  (req, res, next) => {
+    docenteControllers.updateNota(req, res).catch(next);
+  }
+);
+
 export default docenteRouter;
