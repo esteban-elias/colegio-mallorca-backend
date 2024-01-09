@@ -63,7 +63,7 @@ Este es un proyecto de tercer semestre de informática. "Colegio Mallorca" es un
       en la clase especificada.
 
 10. `DELETE /clase/:idClase/alumno/:idAlumno/nota/:idNota`
-    - Actualiza la nota especificada del alumno especificado
+    - Elimina la nota especificada del alumno especificado
       en la clase especificada.
 
    
