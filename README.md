@@ -1,6 +1,6 @@
 # Backend API para la intranet del Colegio Mallorca.
 
-Este es un proyecto de tercer semestre de informática. "Colegio Mallorca" es una institución ficticia.
+"Colegio Mallorca" es una institución ficticia. Este fue un proyecto de tercer semestre de informática.
 
 ## Tecnologías utilizadas
 - Express.js
